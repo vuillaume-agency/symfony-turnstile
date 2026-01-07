@@ -1,7 +1,4 @@
 {
-    "copy-from-recipe": {
-        "config/": "%CONFIG_DIR%/"
-    },
     "env": {
         "TURNSTILE_KEY": "your-site-key",
         "TURNSTILE_SECRET": "your-secret-key"

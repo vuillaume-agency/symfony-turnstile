@@ -25,12 +25,10 @@ class Configuration implements ConfigurationInterface
             ->defaultTrue()
             ->end()
             ->scalarNode('key')
-            ->isRequired()
-            ->cannotBeEmpty()
+            ->defaultValue('%env(TURNSTILE_KEY)%')
             ->end()
             ->scalarNode('secret')
-            ->cannotBeEmpty()
-            ->isRequired()
+            ->defaultValue('%env(TURNSTILE_SECRET)%')
             ->end()
             ->end();
 

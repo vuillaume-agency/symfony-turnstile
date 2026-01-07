@@ -22,11 +22,10 @@ A Symfony bundle to integrate [Cloudflare Turnstile](https://www.cloudflare.com/
 composer require vuillaume-agency/symfony-turnstile
 ```
 
-```yaml
-# config/packages/vuillaume_agency_turnstile.yaml
-vuillaume_agency_turnstile:
-    key: '%env(TURNSTILE_KEY)%'
-    secret: '%env(TURNSTILE_SECRET)%'
+```env
+# .env
+TURNSTILE_KEY="your-site-key"
+TURNSTILE_SECRET="your-secret-key"
 ```
 
 ```php
@@ -103,24 +102,7 @@ return [
 ];
 ```
 
-### Step 3: Configure the bundle
-
-Create `config/packages/vuillaume_agency_turnstile.yaml`:
-
-```yaml
-vuillaume_agency_turnstile:
-    key: '%env(TURNSTILE_KEY)%'
-    secret: '%env(TURNSTILE_SECRET)%'
-    enable: true
-```
-
-| Option   | Type    | Required | Description |
-|----------|---------|----------|-------------|
-| `key`    | string  | Yes      | Your Turnstile site key (public) |
-| `secret` | string  | Yes      | Your Turnstile secret key (private) |
-| `enable` | boolean | No       | Enable/disable validation (default: `true`) |
-
-### Step 4: Add your Cloudflare credentials
+### Step 3: Add your Cloudflare credentials
 
 Get your keys from the [Cloudflare Dashboard](https://dash.cloudflare.com/?to=/:account/turnstile) and add them to your `.env` file:
 
@@ -128,6 +110,25 @@ Get your keys from the [Cloudflare Dashboard](https://dash.cloudflare.com/?to=/:
 TURNSTILE_KEY="your-site-key"
 TURNSTILE_SECRET="your-secret-key"
 ```
+
+That's it! The bundle automatically reads from these environment variables.
+
+### Optional: Custom configuration
+
+If you need to customize the bundle, create `config/packages/vuillaume_agency_turnstile.yaml`:
+
+```yaml
+vuillaume_agency_turnstile:
+    key: '%env(TURNSTILE_KEY)%'      # Default: reads from TURNSTILE_KEY env var
+    secret: '%env(TURNSTILE_SECRET)%' # Default: reads from TURNSTILE_SECRET env var
+    enable: true                      # Default: true
+```
+
+| Option   | Type    | Default                      | Description |
+|----------|---------|------------------------------|-------------|
+| `key`    | string  | `%env(TURNSTILE_KEY)%`       | Your Turnstile site key (public) |
+| `secret` | string  | `%env(TURNSTILE_SECRET)%`    | Your Turnstile secret key (private) |
+| `enable` | boolean | `true`                       | Enable/disable validation |
 
 ## Usage
 
