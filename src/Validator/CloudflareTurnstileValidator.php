@@ -4,53 +4,38 @@ declare(strict_types=1);
 
 namespace VuillaumeAgency\TurnstileBundle\Validator;
 
-use VuillaumeAgency\TurnstileBundle\Http\CloudflareTurnstileHttpClient;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use VuillaumeAgency\TurnstileBundle\Http\CloudflareTurnstileHttpClient;
 
 final class CloudflareTurnstileValidator extends ConstraintValidator
 {
-    private bool $enable;
-
-    private RequestStack $requestStack;
-
-    private CloudflareTurnstileHttpClient $turnstileHttpClient;
-
     public function __construct(
-        bool $enable,
-        RequestStack $requestStack,
-        CloudflareTurnstileHttpClient $turnstileHttpClient
+        private readonly bool $enable,
+        private readonly RequestStack $requestStack,
+        private readonly CloudflareTurnstileHttpClient $turnstileHttpClient,
     ) {
-        $this->enable = $enable;
-        $this->requestStack = $requestStack;
-        $this->turnstileHttpClient = $turnstileHttpClient;
     }
 
-    /**
-     * Checks if the passed value is valid.
-     *
-     * @param mixed $value The value that should be validated
-     * @param Constraint $constraint The constraint for the validation
-     */
-    public function validate($value, Constraint $constraint): void
+    public function validate(mixed $value, Constraint $constraint): void
     {
-        if ($this->enable === false) {
+        if (false === $this->enable) {
             return;
         }
 
         $request = $this->requestStack->getCurrentRequest();
-        \assert($request !== null);
+        \assert(null !== $request);
         $turnstileResponse = (string) $request->request->get('cf-turnstile-response');
 
-        if ($turnstileResponse === '') {
+        if ('' === $turnstileResponse) {
             $this->context->buildViolation($constraint->message)
                 ->addViolation();
 
             return;
         }
 
-        if ($this->turnstileHttpClient->verifyResponse($turnstileResponse) === false) {
+        if (false === $this->turnstileHttpClient->verifyResponse($turnstileResponse)) {
             $this->context->buildViolation($constraint->message)
                 ->addViolation();
         }

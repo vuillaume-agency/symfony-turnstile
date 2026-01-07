@@ -9,21 +9,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-final class CloudflareTurnstileHttpClient
+final readonly class CloudflareTurnstileHttpClient
 {
     private const SITEVERIFY_ENDPOINT = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 
-    private HttpClientInterface $httpClient;
-
-    private string $secret;
-
-    private LoggerInterface $logger;
-
-    public function __construct(string $secret, HttpClientInterface $httpClient, LoggerInterface $logger)
-    {
-        $this->secret = $secret;
-        $this->httpClient = $httpClient;
-        $this->logger = $logger;
+    public function __construct(
+        private string $secret,
+        private HttpClientInterface $httpClient,
+        private LoggerInterface $logger,
+    ) {
     }
 
     public function verifyResponse(string $turnstileResponse): bool
@@ -45,7 +39,7 @@ final class CloudflareTurnstileHttpClient
             $this->logger->error(
                 \sprintf(
                     'Cloudflare Turnstile HTTP exception (%s) with a message: %s',
-                    \get_class($e),
+                    $e::class,
                     $e->getMessage(),
                 ),
             );
@@ -53,6 +47,6 @@ final class CloudflareTurnstileHttpClient
             return false;
         }
 
-        return \array_key_exists('success', $content) && $content['success'] === true;
+        return \array_key_exists('success', $content) && true === $content['success'];
     }
 }
