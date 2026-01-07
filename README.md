@@ -5,8 +5,6 @@
 
 A Symfony bundle to integrate [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile/) on your forms. Turnstile is a privacy-preserving alternative to CAPTCHA that doesn't require user interaction.
 
-![Cloudflare Turnstile for Symfony Form](screenshot.png)
-
 ## Why Turnstile over reCAPTCHA?
 
 Cloudflare Turnstile offers significant advantages over Google reCAPTCHA:
