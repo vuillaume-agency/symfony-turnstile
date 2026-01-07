@@ -20,6 +20,10 @@ final class CloudflareTurnstileValidator extends ConstraintValidator
 
     public function validate(mixed $value, Constraint $constraint): void
     {
+        if (!$constraint instanceof CloudflareTurnstile) {
+            return;
+        }
+
         if (false === $this->enable) {
             return;
         }
@@ -29,14 +33,14 @@ final class CloudflareTurnstileValidator extends ConstraintValidator
         $turnstileResponse = (string) $request->request->get('cf-turnstile-response');
 
         if ('' === $turnstileResponse) {
-            $this->context->buildViolation($constraint->message)
+            $this->context->buildViolation($constraint->missingResponseMessage)
                 ->addViolation();
 
             return;
         }
 
         if (false === $this->turnstileHttpClient->verifyResponse($turnstileResponse)) {
-            $this->context->buildViolation($constraint->message)
+            $this->context->buildViolation($constraint->verificationFailedMessage)
                 ->addViolation();
         }
     }

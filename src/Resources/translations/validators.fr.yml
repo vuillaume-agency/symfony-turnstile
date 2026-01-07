@@ -1,1 +1,2 @@
-invalid_turnstile: Merci de cocher la case
+turnstile.missing_response: Veuillez compléter le défi de sécurité.
+turnstile.verification_failed: La vérification de sécurité a échoué. Veuillez réessayer.

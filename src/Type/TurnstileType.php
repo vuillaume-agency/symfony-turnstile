@@ -23,8 +23,26 @@ class TurnstileType extends AbstractType
     {
         $resolver->setDefaults([
             'mapped' => false,
-            'constraints' => new CloudflareTurnstile(),
+            'missing_response_message' => null,
+            'verification_failed_message' => null,
         ]);
+
+        $resolver->setAllowedTypes('missing_response_message', ['null', 'string']);
+        $resolver->setAllowedTypes('verification_failed_message', ['null', 'string']);
+
+        $resolver->setNormalizer('constraints', function ($resolver, $value) {
+            $options = [];
+
+            if (null !== $resolver['missing_response_message']) {
+                $options['missingResponseMessage'] = $resolver['missing_response_message'];
+            }
+
+            if (null !== $resolver['verification_failed_message']) {
+                $options['verificationFailedMessage'] = $resolver['verification_failed_message'];
+            }
+
+            return new CloudflareTurnstile(...$options);
+        });
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options): void
