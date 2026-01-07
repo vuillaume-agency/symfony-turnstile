@@ -1,0 +1,3 @@
+vuillaume_agency_turnstile:
+    key: '%env(TURNSTILE_KEY)%'
+    secret: '%env(TURNSTILE_SECRET)%'

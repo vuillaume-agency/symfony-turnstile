@@ -225,13 +225,13 @@ No changes needed in your controllers — validation works the same way.
 
 ## Testing
 
-During development, use Cloudflare's test credentials:
+During development, use Cloudflare's test credentials instead of real keys. This is the **recommended approach** as it keeps validation active while providing predictable behavior.
 
 ### Test site keys
 
 | Site key                   | Behavior                        |
 |----------------------------|---------------------------------|
-| `1x00000000000000000000AA` | Always passes                   |
+| `1x00000000000000000000AA` | Always passes (recommended)     |
 | `2x00000000000000000000AB` | Always blocks                   |
 | `3x00000000000000000000FF` | Forces an interactive challenge |
 
@@ -239,17 +239,25 @@ During development, use Cloudflare's test credentials:
 
 | Secret key                            | Behavior                       |
 |---------------------------------------|--------------------------------|
-| `1x0000000000000000000000000000000AA` | Always passes                  |
+| `1x0000000000000000000000000000000AA` | Always passes (recommended)    |
 | `2x0000000000000000000000000000000AA` | Always fails                   |
 | `3x0000000000000000000000000000000AA` | Returns "token already spent"  |
 
-### Disabling validation in development
+### Example dev configuration
+
+```env
+# .env.local (for development)
+TURNSTILE_KEY="1x00000000000000000000AA"
+TURNSTILE_SECRET="1x0000000000000000000000000000000AA"
+```
+
+### Alternative: Disabling validation
+
+You can also disable validation entirely, but using test keys is preferred as it keeps your code paths consistent between environments:
 
 ```yaml
 # config/packages/dev/vuillaume_agency_turnstile.yaml
 vuillaume_agency_turnstile:
-    key: '%env(TURNSTILE_KEY)%'
-    secret: '%env(TURNSTILE_SECRET)%'
     enable: false
 ```
 
