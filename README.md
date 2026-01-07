@@ -1,107 +1,197 @@
-A simple package to help integrate Cloudflare Turnstile on Symfony Form.
-======================
+# Symfony Turnstile Bundle
 
-[![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.4-green)](https://php.net/)
-[![Minimum Symfony Version](https://img.shields.io/badge/symfony-%3E%3D%205.4-green)](https://symfony.com)
-[![GitHub release](https://img.shields.io/github/v/release/Pixel-Open/cloudflare-turnstile-bundle)](https://github.com/Pixel-Open/cloudflare-turnstile-bundle/releases)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Pixel-Open_cloudflare-turnstile-bundle&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Pixel-Open_cloudflare-turnstile-bundle)
+[![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%208.2-green)](https://php.net/)
+[![Minimum Symfony Version](https://img.shields.io/badge/symfony-%3E%3D%207.4-green)](https://symfony.com)
 
-This packages provides helper for setting up and validating Cloudflare Turnstile CAPTCHA responses.
+A Symfony bundle to integrate [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile/) on your forms. Turnstile is a privacy-preserving alternative to CAPTCHA that doesn't require user interaction.
 
 ![Cloudflare Turnstile for Symfony Form](screenshot.png)
 
+## Requirements
+
+| Requirement | Version |
+|-------------|---------|
+| PHP | >= 8.2 |
+| Symfony | >= 7.4 |
+
 ## Installation
 
-You can install the package via Composer:
+### Step 1: Install the package
 
 ```bash
-composer require pixelopen/cloudflare-turnstile-bundle
+composer require vuillaume-agency/symfony-turnstile
 ```
 
-Add bundle into config/bundles.php file :
+### Step 2: Register the bundle
+
+Add the bundle to your `config/bundles.php`:
 
 ```php
-PixelOpen\CloudflareTurnstileBundle\PixelOpenCloudflareTurnstileBundle::class => ['all' => true]
+return [
+    // ...
+    VuillaumeAgency\TurnstileBundle\VuillaumeAgencyTurnstileBundle::class => ['all' => true],
+];
 ```
-Add a config file into config/packages/pixel_open_cloudflare_turnstile.yaml : 
+
+### Step 3: Configure the bundle
+
+Create `config/packages/vuillaume_agency_turnstile.yaml`:
 
 ```yaml
-pixel_open_cloudflare_turnstile:
-  key: '%env(TURNSTILE_KEY)%'
-  secret: '%env(TURNSTILE_SECRET)%'
-  enable : true
+vuillaume_agency_turnstile:
+    key: '%env(TURNSTILE_KEY)%'
+    secret: '%env(TURNSTILE_SECRET)%'
+    enable: true
 ```
 
-Visit Cloudflare to create your site key and secret key and add them to your `.env` file.
+| Option | Type | Required | Description |
+|--------|------|----------|-------------|
+| `key` | string | Yes | Your Turnstile site key (public) |
+| `secret` | string | Yes | Your Turnstile secret key (private) |
+| `enable` | boolean | No | Enable/disable validation (default: `true`). Set to `false` to bypass validation during development. |
 
+### Step 4: Add your Cloudflare credentials
+
+Get your keys from the [Cloudflare Dashboard](https://dash.cloudflare.com/?to=/:account/turnstile) and add them to your `.env` file:
+
+```env
+TURNSTILE_KEY="your-site-key"
+TURNSTILE_SECRET="your-secret-key"
 ```
-TURNSTILE_KEY="1x00000000000000000000AA"
-TURNSTILE_SECRET="2x0000000000000000000000000000000AA"
-```
 
-### Use with your Symfony Form
+## Usage
 
-Create a form type and insert an Turnstile Type to add a Cloudflare Turnstile : 
+### Adding Turnstile to a form
+
+Use `TurnstileType` in your form builder:
 
 ```php
 <?php
 
 namespace App\Form;
 
-use App\Entity\Contact;
-use PixelOpen\CloudflareTurnstileBundle\Type\TurnstileType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use VuillaumeAgency\TurnstileBundle\Type\TurnstileType;
 
 class ContactType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', TextType::class, ['label' => false, 'attr' => ['placeholder' => 'name']])
-            ->add('message', TextareaType::class, ['label' => false, 'attr' => ['placeholder' => 'message']])
-            ->add('security', TurnstileType::class, ['attr' => ['data-action' => 'contact', 'data-theme' => 'dark'], 'label' => false])
-            ->add('submit', SubmitType::class)
-        ;
-    }
-
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'data_class' => Contact::class,
-        ]);
+            ->add('email', EmailType::class)
+            ->add('message', TextareaType::class)
+            ->add('security', TurnstileType::class, [
+                'label' => false,
+            ])
+            ->add('submit', SubmitType::class);
     }
 }
 ```
 
-### Testing
+### Turnstile widget options
 
-Use the following sitekeys and secret keys for testing purposes:
+You can customize the Turnstile widget using the `attr` option:
 
-**Sitekey**
+```php
+->add('security', TurnstileType::class, [
+    'label' => false,
+    'attr' => [
+        'data-theme' => 'dark',      // 'light', 'dark', or 'auto'
+        'data-size' => 'compact',    // 'normal' or 'compact'
+        'data-action' => 'contact',  // Custom action name for analytics
+    ],
+])
+```
 
-| Sitekey                  | Description                     |
-|--------------------------|---------------------------------|
-| 1x00000000000000000000AA | Always passes                   |
-| 2x00000000000000000000AB | Always blocks                   |
-| 3x00000000000000000000FF | Forces an interactive challenge |
+See [Cloudflare Turnstile documentation](https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/) for all available options.
 
-**Secret key**
+## Translations
 
-| Secret key                          | Description                          |
-|-------------------------------------|--------------------------------------|
-| 1x0000000000000000000000000000000AA | Always passes                        |
-| 2x0000000000000000000000000000000AA | Always fails                         |
-| 3x0000000000000000000000000000000AA | Yields a "token already spent" error |
+The bundle provides error messages in **6 languages** out of the box:
 
-## Todo
+| Language | Code |
+|----------|------|
+| English | `en` |
+| French | `fr` |
+| Spanish | `es` |
+| German | `de` |
+| Italian | `it` |
+| Portuguese | `pt` |
 
-+ Add phpunit to test field ~~and validator~~
+### Error messages
+
+Two distinct error messages are provided:
+
+| Key | Description |
+|-----|-------------|
+| `turnstile.missing_response` | Displayed when the user hasn't completed the Turnstile challenge |
+| `turnstile.verification_failed` | Displayed when the server-side verification fails |
+
+### Customizing error messages
+
+#### Option 1: Form options (Recommended)
+
+Pass custom messages directly as form options:
+
+```php
+->add('security', TurnstileType::class, [
+    'label' => false,
+    'missing_response_message' => 'Please verify you are human.',
+    'verification_failed_message' => 'Verification failed, please try again.',
+])
+```
+
+| Option | Description |
+|--------|-------------|
+| `missing_response_message` | Message when user hasn't completed the challenge |
+| `verification_failed_message` | Message when server-side verification fails |
+
+#### Option 2: Override translations
+
+Create your own translation file in `translations/validators.{locale}.yaml`:
+
+```yaml
+# translations/validators.en.yaml
+turnstile.missing_response: Please verify you are human.
+turnstile.verification_failed: Verification failed. Please try again.
+```
+
+## Testing
+
+During development, use Cloudflare's test credentials:
+
+### Test site keys
+
+| Site key | Behavior |
+|----------|----------|
+| `1x00000000000000000000AA` | Always passes |
+| `2x00000000000000000000AB` | Always blocks |
+| `3x00000000000000000000FF` | Forces an interactive challenge |
+
+### Test secret keys
+
+| Secret key | Behavior |
+|------------|----------|
+| `1x0000000000000000000000000000000AA` | Always passes |
+| `2x0000000000000000000000000000000AA` | Always fails |
+| `3x0000000000000000000000000000000AA` | Returns "token already spent" error |
+
+### Disabling validation in development
+
+Set `enable: false` in your config to bypass Turnstile validation:
+
+```yaml
+# config/packages/dev/vuillaume_agency_turnstile.yaml
+vuillaume_agency_turnstile:
+    key: '%env(TURNSTILE_KEY)%'
+    secret: '%env(TURNSTILE_SECRET)%'
+    enable: false
+```
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+The MIT License (MIT).
