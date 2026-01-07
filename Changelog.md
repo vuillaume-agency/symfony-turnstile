@@ -1,45 +1,74 @@
 # Changelog
 
-## 0.4.1 (30/09/2024)
+## 1.0.0 (2026-01-07)
 
--  fix deprecation from Extension class #9 (thank you IndraGunawan)
+First release of `vuillaume-agency/symfony-turnstile`, a fork of `pixelopen/cloudflare-turnstile-bundle`.
 
-## 0.4.0 (31/05/2024)
+### Breaking Changes
 
-+ Decouple HTTP client and validator so we can verify responses outside Forms #7 (thank you ikvasnica)
-- Fix TreeBuilder name #8 (thank you IndraGunawan)
+- Requires PHP >= 8.2
+- Requires Symfony >= 7.4
+- New namespace: `VuillaumeAgency\TurnstileBundle`
+- New config key: `vuillaume_agency_turnstile`
 
-## 0.3.0 (08/12/2023)
+### Added
 
-+ Allow Symfony 7 (thank you HeahDude)
+- Support for Symfony 8.0
+- 6 languages for error messages (en, fr, es, de, it, pt)
+- Two distinct error messages (missing_response, verification_failed)
+- Form options for custom error messages
+- TurnstileHttpClientInterface for better testability
+- Validator unit tests
 
-## 0.2.0 (31/10/2023)
+### Changed
 
-+ Add enable option
+- Modernized code with PHP 8.2+ features (readonly, constructor promotion)
+- Upgraded dev dependencies (PHPUnit 12, PHPStan 2, PHP-CS-Fixer)
 
-## 0.1.4 (07/07/2023)
+---
 
-+ Prefer defer to async to improve page speed #2 (thank Huluti)
-+ add codacy
-+ add security checker on github actions
-+ add phpstan on github actions
-+ add github actions
+## Previous releases (pixelopen/cloudflare-turnstile-bundle)
 
-## 0.1.3 (05/12/2022)
+### 0.4.1 (2024-09-30)
 
-+  Add explicit return type to avoid deprecation warnings on Symfony 6.2 #1 (thank you shmshd)
+- Fix deprecation from Extension class
 
-## 0.1.2 (10/22/2022)
+### 0.4.0 (2024-05-31)
 
-+ Complete documentation
-- Remove recipe (add recipe into recipes-contrib https://github.com/symfony/recipes-contrib/pull/1447)
+- Decouple HTTP client and validator so we can verify responses outside Forms
+- Fix TreeBuilder name
 
-## 0.1.1 (10/22/2022)
+### 0.3.0 (2023-12-08)
 
-+ Add recipe
-+ Change namespace
+- Allow Symfony 7
+
+### 0.2.0 (2023-10-31)
+
+- Add enable option
+
+### 0.1.4 (2023-07-07)
+
+- Prefer defer to async to improve page speed
+- Add codacy
+- Add security checker on github actions
+- Add phpstan on github actions
+- Add github actions
+
+### 0.1.3 (2022-12-05)
+
+- Add explicit return type to avoid deprecation warnings on Symfony 6.2
+
+### 0.1.2 (2022-10-22)
+
+- Complete documentation
+- Remove recipe (add recipe into recipes-contrib)
+
+### 0.1.1 (2022-10-22)
+
+- Add recipe
+- Change namespace
 - Fix installation on readme file
 
-## 0.1.0 (10/22/2022)
+### 0.1.0 (2022-10-22)
 
-+ First release
+- First release
