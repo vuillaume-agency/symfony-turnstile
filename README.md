@@ -212,6 +212,69 @@ The bundle provides error messages in **6 languages**:
 | Italian    | `it` |
 | Portuguese | `pt` |
 
+## Migrating from pixelopen/cloudflare-turnstile-bundle
+
+This bundle is a modernized fork. Here's how to migrate:
+
+### Step 1: Replace the package
+
+```bash
+composer remove pixelopen/cloudflare-turnstile-bundle
+composer require vuillaume-agency/symfony-turnstile
+```
+
+### Step 2: Update bundles.php
+
+```php
+// config/bundles.php
+// Remove:
+// PixelOpen\CloudflareTurnstileBundle\PixelOpenCloudflareTurnstileBundle::class => ['all' => true],
+
+// Add:
+VuillaumeAgency\TurnstileBundle\VuillaumeAgencyTurnstileBundle::class => ['all' => true],
+```
+
+### Step 3: Update configuration
+
+```bash
+# Rename config file (if you have one)
+mv config/packages/pixel_open_cloudflare_turnstile.yaml config/packages/vuillaume_agency_turnstile.yaml
+```
+
+Update the config key in the file:
+
+```yaml
+# Before:
+# pixel_open_cloudflare_turnstile:
+#     key: '%env(TURNSTILE_KEY)%'
+#     secret: '%env(TURNSTILE_SECRET)%'
+
+# After (or just delete the file - env vars work by default now):
+vuillaume_agency_turnstile:
+    key: '%env(TURNSTILE_KEY)%'
+    secret: '%env(TURNSTILE_SECRET)%'
+```
+
+### Step 4: Update imports in your code
+
+Find and replace in your project:
+
+| Old | New |
+|-----|-----|
+| `PixelOpen\CloudflareTurnstileBundle\Type\TurnstileType` | `VuillaumeAgency\TurnstileBundle\Type\TurnstileType` |
+| `PixelOpen\CloudflareTurnstileBundle\Validator\CloudflareTurnstile` | `VuillaumeAgency\TurnstileBundle\Validator\CloudflareTurnstile` |
+
+```bash
+# Quick find/replace with sed (Linux/macOS)
+find src -name "*.php" -exec sed -i '' 's/PixelOpen\\CloudflareTurnstileBundle/VuillaumeAgency\\TurnstileBundle/g' {} +
+```
+
+### Step 5: Clear cache
+
+```bash
+php bin/console cache:clear
+```
+
 ## Migrating from reCAPTCHA
 
 Switching from Google reCAPTCHA is straightforward:
