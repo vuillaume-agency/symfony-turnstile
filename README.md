@@ -7,6 +7,43 @@ A Symfony bundle to integrate [Cloudflare Turnstile](https://www.cloudflare.com/
 
 ![Cloudflare Turnstile for Symfony Form](screenshot.png)
 
+## Why Turnstile over reCAPTCHA?
+
+Cloudflare Turnstile offers significant advantages over Google reCAPTCHA:
+
+| Feature | Turnstile | reCAPTCHA |
+|---------|-----------|-----------|
+| **User experience** | Invisible, no puzzles to solve | Often requires solving image puzzles |
+| **GDPR compliance** | Privacy-first, no tracking cookies | Transfers data to Google (US), requires explicit consent |
+| **Data collection** | Minimal, no personal data stored | Collects browsing behavior and device data |
+| **Cookie consent** | No cookie banner required | Requires cookie consent under GDPR |
+| **Performance** | Lightweight (~20KB) | Heavier (~400KB+) |
+| **Cost** | Free for unlimited use | Free tier limited, paid for high volume |
+
+### GDPR considerations
+
+For European websites, reCAPTCHA poses compliance challenges:
+- Data is transferred to Google servers in the US
+- Requires explicit user consent before loading
+- Must be declared in your privacy policy
+- Several EU data protection authorities have raised concerns
+
+Turnstile is designed with privacy in mind and doesn't require cookie consent banners, making it an excellent choice for GDPR-compliant websites.
+
+## About this fork
+
+This bundle is a fork of [pixelopen/cloudflare-turnstile-bundle](https://github.com/Pixel-Open/cloudflare-turnstile-bundle), originally created by Pixel Développement.
+
+**Why we forked it:**
+- The original package was not actively maintained for Symfony 7.4+ and 8.0
+- We needed modern PHP 8.2+ features and up-to-date dependencies
+- We wanted to add improved error messages with multi-language support
+
+**Our commitment:**
+- Active maintenance for Symfony 7.4 LTS and 8.x
+- Regular updates and security patches
+- Community contributions welcome
+
 ## Requirements
 
 | Requirement | Version |
