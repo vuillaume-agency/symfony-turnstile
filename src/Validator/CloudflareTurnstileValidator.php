@@ -45,14 +45,14 @@ final class CloudflareTurnstileValidator extends ConstraintValidator
 
         if ($turnstileResponse === '') {
             $this->context->buildViolation($constraint->message)
-                ->addviolation();
+                ->addViolation();
 
             return;
         }
 
         if ($this->turnstileHttpClient->verifyResponse($turnstileResponse) === false) {
             $this->context->buildViolation($constraint->message)
-                ->addviolation();
+                ->addViolation();
         }
     }
 }
