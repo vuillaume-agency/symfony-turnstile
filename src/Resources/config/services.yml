@@ -1,19 +1,19 @@
 services:
   turnstile.type:
-    class: PixelOpen\CloudflareTurnstileBundle\Type\TurnstileType
+    class: VuillaumeAgency\TurnstileBundle\Type\TurnstileType
     tags: ['form.type']
     arguments:
-      $key: '%pixelopen_cloudflare_turnstile.key%'
-      $enable: '%pixelopen_cloudflare_turnstile.enable%'
+      $key: '%vuillaume_agency_turnstile.key%'
+      $enable: '%vuillaume_agency_turnstile.enable%'
   turnstile.validator:
-    class: PixelOpen\CloudflareTurnstileBundle\Validator\CloudflareTurnstileValidator
+    class: VuillaumeAgency\TurnstileBundle\Validator\CloudflareTurnstileValidator
     tags: ['validator.constraint_validator']
     arguments:
-      $enable: '%pixelopen_cloudflare_turnstile.enable%'
+      $enable: '%vuillaume_agency_turnstile.enable%'
       $turnstileHttpClient: '@turnstile.http_client'
     autowire: true
   turnstile.http_client:
-    class: PixelOpen\CloudflareTurnstileBundle\Http\CloudflareTurnstileHttpClient
+    class: VuillaumeAgency\TurnstileBundle\Http\CloudflareTurnstileHttpClient
     arguments:
-      $secret: '%pixelopen_cloudflare_turnstile.secret%'
+      $secret: '%vuillaume_agency_turnstile.secret%'
     autowire: true

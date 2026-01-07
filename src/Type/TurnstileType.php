@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PixelOpen\CloudflareTurnstileBundle\Type;
+namespace VuillaumeAgency\TurnstileBundle\Type;
 
-use PixelOpen\CloudflareTurnstileBundle\Validator\CloudflareTurnstile;
+use VuillaumeAgency\TurnstileBundle\Validator\CloudflareTurnstile;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormInterface;

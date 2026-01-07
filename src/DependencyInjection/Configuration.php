@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PixelOpen\CloudflareTurnstileBundle\DependencyInjection;
+namespace VuillaumeAgency\TurnstileBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -16,7 +16,7 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder('pixel_open_cloudflare_turnstile');
+        $treeBuilder = new TreeBuilder('vuillaume_agency_turnstile');
         $rootNode = $treeBuilder->getRootNode();
 
         $rootNode

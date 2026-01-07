@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PixelOpen\CloudflareTurnstileBundle\DependencyInjection;
+namespace VuillaumeAgency\TurnstileBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -12,20 +12,20 @@ use Symfony\Component\DependencyInjection\Loader;
 /**
  * This is the class that loads and manages your bundle configuration.
  *
- * @link http://symfony.com/doc/current/cookbook/bundles/extension.html
+ * @see http://symfony.com/doc/current/cookbook/bundles/extension.html
  */
-class PixelOpenCloudflareTurnstileExtension extends Extension
+class VuillaumeAgencyTurnstileExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
         foreach ($config as $key => $value) {
-            $container->setParameter('pixelopen_cloudflare_turnstile.' . $key, $value);
+            $container->setParameter('vuillaume_agency_turnstile.'.$key, $value);
         }
     }
 }

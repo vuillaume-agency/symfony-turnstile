@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PixelOpen\CloudflareTurnstileBundle\Validator;
+namespace VuillaumeAgency\TurnstileBundle\Validator;
 
 use Symfony\Component\Validator\Constraint;
 

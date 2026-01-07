@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PixelOpen\CloudflareTurnstileBundle\Http;
+namespace VuillaumeAgency\TurnstileBundle\Http;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;

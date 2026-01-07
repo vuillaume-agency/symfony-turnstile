@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PixelOpen\CloudflareTurnstileBundle\Validator;
+namespace VuillaumeAgency\TurnstileBundle\Validator;
 
-use PixelOpen\CloudflareTurnstileBundle\Http\CloudflareTurnstileHttpClient;
+use VuillaumeAgency\TurnstileBundle\Http\CloudflareTurnstileHttpClient;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;

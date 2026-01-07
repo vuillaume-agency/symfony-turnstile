@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PixelOpen\CloudflareTurnstileBundle\Http;
+namespace VuillaumeAgency\TurnstileBundle\Tests\Http;
+
+use VuillaumeAgency\TurnstileBundle\Http\CloudflareTurnstileHttpClient;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;

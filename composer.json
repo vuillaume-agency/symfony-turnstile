@@ -1,17 +1,19 @@
 {
-  "name": "pixelopen/cloudflare-turnstile-bundle",
-  "description": "A simple package to help integrate Cloudflare Turnstile on Symfony.",
+  "name": "vuillaume-agency/symfony-turnstile",
+  "description": "A Symfony (>= 7.4) bundle to integrate Cloudflare Turnstile on forms.",
   "keywords": [
-    "symfony bundle",
-    "cloudflare-turnstile",
-    "form security",
-    "captcha"
+    "symfony",
+    "bundle",
+    "cloudflare",
+    "turnstile",
+    "form",
+    "security"
   ],
   "license": "MIT",
   "authors": [
     {
-      "name": "Pixel Open Team",
-      "homepage": "https://pixel-open.org/projects/symfony-bundle-cloudflare-turnstile/"
+      "name": "Vuillaume Agency",
+      "homepage": "https://www.vuillaume-agency.com"
     }
   ],
   "require": {
@@ -25,12 +27,12 @@
   },
   "autoload": {
     "psr-4": {
-      "PixelOpen\\CloudflareTurnstileBundle\\": "src/"
+      "VuillaumeAgency\\TurnstileBundle\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "PixelOpen\\CloudflareTurnstileBundle\\": "tests/"
+      "VuillaumeAgency\\TurnstileBundle\\Tests\\": "tests/"
     }
   },
   "require-dev": {
