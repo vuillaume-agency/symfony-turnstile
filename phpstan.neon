@@ -3,5 +3,7 @@ includes:
 
 parameters:
     level: 7
+    paths:
+        - src
     ignoreErrors:
-        - '#^Access to an undefined property Symfony\\Component\\Validator\\Constraint\:\:\$message\.$#'
+        - identifier: missingType.generics
