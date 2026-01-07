@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.1 (2026-01-08)
+
+### Changed
+
+- Zero-config setup: bundle now reads from `TURNSTILE_KEY` and `TURNSTILE_SECRET` env vars by default
+- No YAML configuration file required for basic usage
+- Simplified installation to 3 steps
+- Recommend test keys over `enable: false` for development
+
 ## 1.0.0 (2026-01-07)
 
 First release of `vuillaume-agency/symfony-turnstile`, a fork of `pixelopen/cloudflare-turnstile-bundle`.
