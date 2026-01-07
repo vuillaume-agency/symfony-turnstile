@@ -2,40 +2,75 @@
 
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%208.2-green)](https://php.net/)
 [![Minimum Symfony Version](https://img.shields.io/badge/symfony-%3E%3D%207.4-green)](https://symfony.com)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 A Symfony bundle to integrate [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile/) on your forms. Turnstile is a privacy-preserving alternative to CAPTCHA that doesn't require user interaction.
 
+## Features
+
+- **Zero user friction** — No puzzles, no clicking on traffic lights
+- **GDPR-friendly** — No cookie consent required, privacy-first design
+- **6 languages included** — English, French, Spanish, German, Italian, Portuguese
+- **Symfony 8 ready** — Full support for Symfony 7.4 LTS and 8.x
+- **Customizable messages** — Override error messages via form options or translations
+- **Easy theming** — Light, dark, or auto theme support
+- **Fully tested** — PHPUnit tests and PHPStan static analysis
+
+## Quick Start
+
+```bash
+composer require vuillaume-agency/symfony-turnstile
+```
+
+```yaml
+# config/packages/vuillaume_agency_turnstile.yaml
+vuillaume_agency_turnstile:
+    key: '%env(TURNSTILE_KEY)%'
+    secret: '%env(TURNSTILE_SECRET)%'
+```
+
+```php
+// In your form
+->add('captcha', TurnstileType::class)
+```
+
+Get your free keys at [Cloudflare Dashboard](https://dash.cloudflare.com/?to=/:account/turnstile).
+
 ## Why Turnstile over reCAPTCHA?
 
-Cloudflare Turnstile offers significant advantages over Google reCAPTCHA:
-
 | Feature | Turnstile | reCAPTCHA |
-|---------|-----------|-----------|
-| **User experience** | Invisible, no puzzles to solve | Often requires solving image puzzles |
-| **GDPR compliance** | Privacy-first, no tracking cookies | Transfers data to Google (US), requires explicit consent |
-| **Data collection** | Minimal, no personal data stored | Collects browsing behavior and device data |
-| **Cookie consent** | No cookie banner required | Requires cookie consent under GDPR |
-| **Performance** | Lightweight (~20KB) | Heavier (~400KB+) |
-| **Cost** | Free for unlimited use | Free tier limited, paid for high volume |
+|---------|:---------:|:---------:|
+| Usually invisible (no puzzles) | Yes | Yes (v3 only) |
+| GDPR compliant by design | Yes | No (requires consent) |
+| Uses cookies | No | Yes |
+| Data used for advertising | No | Unclear |
+| Script size | ~30KB | ~80KB |
+| Free unlimited | Yes | Yes (with limits) |
 
 ### GDPR considerations
 
-For European websites, reCAPTCHA poses compliance challenges:
-- Data is transferred to Google servers in the US
-- Requires explicit user consent before loading
-- Must be declared in your privacy policy
-- Several EU data protection authorities have raised concerns
+For European websites, reCAPTCHA poses significant compliance challenges:
 
-Turnstile is designed with privacy in mind and doesn't require cookie consent banners, making it an excellent choice for GDPR-compliant websites.
+- **Cookies**: reCAPTCHA sets cookies that require user consent under GDPR
+- **Data transfer**: User data is sent to Google servers in the US
+- **Consent required**: Must obtain explicit consent before loading reCAPTCHA
+- **Fines**: French DPA (CNIL) has fined companies for improper reCAPTCHA implementation
+
+Turnstile is designed with privacy in mind:
+
+- **No cookies**: Doesn't set any cookies, no consent banner needed
+- **Minimal data**: Only collects what's necessary for bot detection (IP, TLS fingerprint)
+- **No advertising**: Cloudflare explicitly prohibits using collected data for ads or tracking
+- **GDPR-ready**: Can be used without additional consent mechanisms
 
 ## About this fork
 
 This bundle is a fork of [pixelopen/cloudflare-turnstile-bundle](https://github.com/Pixel-Open/cloudflare-turnstile-bundle), originally created by Pixel Développement.
 
-**Why we forked it:**
-- The original package was not actively maintained for Symfony 7.4+ and 8.0
+**Why we forked:**
+- The original package was not maintained for Symfony 7.4+ and 8.0
 - We needed modern PHP 8.2+ features and up-to-date dependencies
-- We wanted to add improved error messages with multi-language support
+- We added improved error messages with multi-language support
 
 **Our commitment:**
 - Active maintenance for Symfony 7.4 LTS and 8.x
@@ -46,8 +81,8 @@ This bundle is a fork of [pixelopen/cloudflare-turnstile-bundle](https://github.
 
 | Requirement | Version |
 |-------------|---------|
-| PHP | >= 8.2 |
-| Symfony | >= 7.4 |
+| PHP         | >= 8.2  |
+| Symfony     | >= 7.4  |
 
 ## Installation
 
@@ -79,11 +114,11 @@ vuillaume_agency_turnstile:
     enable: true
 ```
 
-| Option | Type | Required | Description |
-|--------|------|----------|-------------|
-| `key` | string | Yes | Your Turnstile site key (public) |
-| `secret` | string | Yes | Your Turnstile secret key (private) |
-| `enable` | boolean | No | Enable/disable validation (default: `true`). Set to `false` to bypass validation during development. |
+| Option   | Type    | Required | Description |
+|----------|---------|----------|-------------|
+| `key`    | string  | Yes      | Your Turnstile site key (public) |
+| `secret` | string  | Yes      | Your Turnstile secret key (private) |
+| `enable` | boolean | No       | Enable/disable validation (default: `true`) |
 
 ### Step 4: Add your Cloudflare credentials
 
@@ -119,7 +154,7 @@ class ContactType extends AbstractType
         $builder
             ->add('email', EmailType::class)
             ->add('message', TextareaType::class)
-            ->add('security', TurnstileType::class, [
+            ->add('captcha', TurnstileType::class, [
                 'label' => false,
             ])
             ->add('submit', SubmitType::class);
@@ -127,12 +162,12 @@ class ContactType extends AbstractType
 }
 ```
 
-### Turnstile widget options
+### Widget customization
 
-You can customize the Turnstile widget using the `attr` option:
+Customize the Turnstile widget appearance:
 
 ```php
-->add('security', TurnstileType::class, [
+->add('captcha', TurnstileType::class, [
     'label' => false,
     'attr' => [
         'data-theme' => 'dark',      // 'light', 'dark', or 'auto'
@@ -144,56 +179,49 @@ You can customize the Turnstile widget using the `attr` option:
 
 See [Cloudflare Turnstile documentation](https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/) for all available options.
 
-## Translations
-
-The bundle provides error messages in **6 languages** out of the box:
-
-| Language | Code |
-|----------|------|
-| English | `en` |
-| French | `fr` |
-| Spanish | `es` |
-| German | `de` |
-| Italian | `it` |
-| Portuguese | `pt` |
-
-### Error messages
-
-Two distinct error messages are provided:
-
-| Key | Description |
-|-----|-------------|
-| `turnstile.missing_response` | Displayed when the user hasn't completed the Turnstile challenge |
-| `turnstile.verification_failed` | Displayed when the server-side verification fails |
-
-### Customizing error messages
-
-#### Option 1: Form options (Recommended)
+### Custom error messages
 
 Pass custom messages directly as form options:
 
 ```php
-->add('security', TurnstileType::class, [
+->add('captcha', TurnstileType::class, [
     'label' => false,
     'missing_response_message' => 'Please verify you are human.',
     'verification_failed_message' => 'Verification failed, please try again.',
 ])
 ```
 
-| Option | Description |
-|--------|-------------|
-| `missing_response_message` | Message when user hasn't completed the challenge |
-| `verification_failed_message` | Message when server-side verification fails |
-
-#### Option 2: Override translations
-
-Create your own translation file in `translations/validators.{locale}.yaml`:
+Or override translations in `translations/validators.{locale}.yaml`:
 
 ```yaml
-# translations/validators.en.yaml
 turnstile.missing_response: Please verify you are human.
 turnstile.verification_failed: Verification failed. Please try again.
 ```
+
+## Translations
+
+The bundle provides error messages in **6 languages**:
+
+| Language   | Code |
+|------------|------|
+| English    | `en` |
+| French     | `fr` |
+| Spanish    | `es` |
+| German     | `de` |
+| Italian    | `it` |
+| Portuguese | `pt` |
+
+## Migrating from reCAPTCHA
+
+Switching from Google reCAPTCHA is straightforward:
+
+1. Remove your reCAPTCHA bundle and configuration
+2. Install this bundle (see [Installation](#installation))
+3. Replace `RecaptchaType` with `TurnstileType` in your forms
+4. Remove reCAPTCHA from your cookie consent banner
+5. Update your privacy policy (simpler now!)
+
+No changes needed in your controllers — validation works the same way.
 
 ## Testing
 
@@ -201,23 +229,21 @@ During development, use Cloudflare's test credentials:
 
 ### Test site keys
 
-| Site key | Behavior |
-|----------|----------|
-| `1x00000000000000000000AA` | Always passes |
-| `2x00000000000000000000AB` | Always blocks |
+| Site key                   | Behavior                        |
+|----------------------------|---------------------------------|
+| `1x00000000000000000000AA` | Always passes                   |
+| `2x00000000000000000000AB` | Always blocks                   |
 | `3x00000000000000000000FF` | Forces an interactive challenge |
 
 ### Test secret keys
 
-| Secret key | Behavior |
-|------------|----------|
-| `1x0000000000000000000000000000000AA` | Always passes |
-| `2x0000000000000000000000000000000AA` | Always fails |
-| `3x0000000000000000000000000000000AA` | Returns "token already spent" error |
+| Secret key                            | Behavior                       |
+|---------------------------------------|--------------------------------|
+| `1x0000000000000000000000000000000AA` | Always passes                  |
+| `2x0000000000000000000000000000000AA` | Always fails                   |
+| `3x0000000000000000000000000000000AA` | Returns "token already spent"  |
 
 ### Disabling validation in development
-
-Set `enable: false` in your config to bypass Turnstile validation:
 
 ```yaml
 # config/packages/dev/vuillaume_agency_turnstile.yaml
@@ -226,6 +252,18 @@ vuillaume_agency_turnstile:
     secret: '%env(TURNSTILE_SECRET)%'
     enable: false
 ```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+Please ensure tests pass (`vendor/bin/phpunit`) and code follows standards (`vendor/bin/php-cs-fixer fix`).
 
 ## License
 
