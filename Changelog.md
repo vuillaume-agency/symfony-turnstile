@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.2 (2026-01-08)
+
+### Added
+
+- Migration guide from `pixelopen/cloudflare-turnstile-bundle`
+
 ## 1.0.1 (2026-01-08)
 
 ### Changed
