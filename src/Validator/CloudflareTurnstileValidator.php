@@ -7,14 +7,14 @@ namespace VuillaumeAgency\TurnstileBundle\Validator;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use VuillaumeAgency\TurnstileBundle\Http\CloudflareTurnstileHttpClient;
+use VuillaumeAgency\TurnstileBundle\Http\TurnstileHttpClientInterface;
 
 final class CloudflareTurnstileValidator extends ConstraintValidator
 {
     public function __construct(
         private readonly bool $enable,
         private readonly RequestStack $requestStack,
-        private readonly CloudflareTurnstileHttpClient $turnstileHttpClient,
+        private readonly TurnstileHttpClientInterface $turnstileHttpClient,
     ) {
     }
 

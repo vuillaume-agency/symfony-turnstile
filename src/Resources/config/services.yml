@@ -10,10 +10,13 @@ services:
     tags: ['validator.constraint_validator']
     arguments:
       $enable: '%vuillaume_agency_turnstile.enable%'
-      $turnstileHttpClient: '@turnstile.http_client'
+      $turnstileHttpClient: '@VuillaumeAgency\TurnstileBundle\Http\TurnstileHttpClientInterface'
     autowire: true
   turnstile.http_client:
     class: VuillaumeAgency\TurnstileBundle\Http\CloudflareTurnstileHttpClient
     arguments:
       $secret: '%vuillaume_agency_turnstile.secret%'
     autowire: true
+
+  VuillaumeAgency\TurnstileBundle\Http\TurnstileHttpClientInterface:
+    alias: turnstile.http_client
