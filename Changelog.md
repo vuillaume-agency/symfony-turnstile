@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.3 (2026-01-08)
+
+### Fixed
+
+- Fix Symfony 7.4 deprecation warning for Constraint class property initialization
+
 ## 1.0.2 (2026-01-08)
 
 ### Added
