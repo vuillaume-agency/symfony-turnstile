@@ -41,7 +41,7 @@ class TurnstileType extends AbstractType
                 $options['verificationFailedMessage'] = $resolver['verification_failed_message'];
             }
 
-            return new CloudflareTurnstile(...$options);
+            return [new CloudflareTurnstile(...$options)];
         });
     }
 

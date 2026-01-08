@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.4 (2026-01-08)
+
+### Fixed
+
+- Fix form validation crash (constraints must be an array)
+- Fix Constraint parent constructor call
+
 ## 1.0.3 (2026-01-08)
 
 ### Fixed

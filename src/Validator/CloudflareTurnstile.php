@@ -14,6 +14,6 @@ final class CloudflareTurnstile extends Constraint
         ?array $groups = null,
         mixed $payload = null,
     ) {
-        parent::__construct(null, $groups, $payload);
+        parent::__construct([], $groups, $payload);
     }
 }
