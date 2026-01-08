@@ -1,13 +1,22 @@
 {
   "name": "vuillaume-agency/symfony-turnstile",
-  "description": "A Symfony (>= 7.4) bundle to integrate Cloudflare Turnstile on forms.",
+  "description": "Symfony bundle for Cloudflare Turnstile - a privacy-friendly, GDPR-compliant CAPTCHA alternative. Drop-in reCAPTCHA replacement with zero user friction.",
   "keywords": [
     "symfony",
-    "bundle",
+    "symfony-bundle",
     "cloudflare",
     "turnstile",
-    "form",
-    "security"
+    "captcha",
+    "recaptcha",
+    "recaptcha-alternative",
+    "bot-protection",
+    "spam-protection",
+    "form-validation",
+    "gdpr",
+    "gdpr-compliant",
+    "privacy",
+    "security",
+    "php8"
   ],
   "license": "MIT",
   "authors": [
