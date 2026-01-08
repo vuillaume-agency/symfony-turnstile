@@ -11,7 +11,7 @@ A Symfony bundle to integrate [Cloudflare Turnstile](https://www.cloudflare.com/
 
 - **Zero user friction** — No puzzles, no clicking on traffic lights
 - **GDPR-friendly** — No cookie consent required, privacy-first design
-- **6 languages included** — English, French, Spanish, German, Italian, Portuguese
+- **22 languages included** — All major European languages supported
 - **Symfony 8 ready** — Full support for Symfony 7.4 LTS and 8.x
 - **Customizable messages** — Override error messages via form options or translations
 - **Easy theming** — Light, dark, or auto theme support
@@ -202,16 +202,23 @@ turnstile.verification_failed: Verification failed. Please try again.
 
 ## Translations
 
-The bundle provides error messages in **6 languages**:
+The bundle provides error messages in **22 European languages**:
 
-| Language   | Code |
-|------------|------|
-| English    | `en` |
-| French     | `fr` |
-| Spanish    | `es` |
-| German     | `de` |
-| Italian    | `it` |
-| Portuguese | `pt` |
+| Language   | Code | | Language   | Code |
+|------------|------|-|------------|------|
+| English    | `en` | | Hungarian  | `hu` |
+| French     | `fr` | | Swedish    | `sv` |
+| Spanish    | `es` | | Danish     | `da` |
+| German     | `de` | | Finnish    | `fi` |
+| Italian    | `it` | | Norwegian  | `nb` |
+| Portuguese | `pt` | | Greek      | `el` |
+| Dutch      | `nl` | | Czech      | `cs` |
+| Polish     | `pl` | | Slovak     | `sk` |
+| Romanian   | `ro` | | Slovenian  | `sl` |
+| Bulgarian  | `bg` | | Lithuanian | `lt` |
+| Croatian   | `hr` | | Latvian    | `lv` |
+| Ukrainian  | `uk` | | Estonian   | `et` |
+| Turkish    | `tr` | | |
 
 ## Migrating from pixelopen/cloudflare-turnstile-bundle
 

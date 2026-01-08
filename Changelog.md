@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.7 (2026-01-08)
+
+### Added
+
+- 16 new European language translations (22 total)
+- Dutch, Polish, Romanian, Hungarian, Swedish, Danish, Finnish, Norwegian
+- Greek, Czech, Bulgarian, Croatian, Slovak, Slovenian, Ukrainian, Turkish
+- Lithuanian, Latvian, Estonian
+
 ## 1.0.6 (2026-01-08)
 
 ### Added
