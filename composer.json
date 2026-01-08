@@ -48,7 +48,7 @@
     "friendsofphp/php-cs-fixer": "^3.65",
     "phpstan/phpstan": "^2.1",
     "phpstan/phpstan-symfony": "^2.0",
-    "phpunit/phpunit": "^12.0",
+    "phpunit/phpunit": "^11.5",
     "rector/rector": "^2.0"
   }
 }
