@@ -117,7 +117,7 @@ final class DisabledTestConstraintValidatorFactory implements ConstraintValidato
         $className = $constraint->validatedBy();
 
         if (!isset($this->validators[$className])) {
-            if ($className === CloudflareTurnstileValidator::class) {
+            if (CloudflareTurnstileValidator::class === $className) {
                 // enable=false
                 $this->validators[$className] = new CloudflareTurnstileValidator(
                     false,

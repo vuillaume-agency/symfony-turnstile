@@ -46,7 +46,7 @@ final class TestResponse implements ResponseInterface
 
     public function toArray(bool $throw = true): array
     {
-        if ($throw && $this->content === 'throwException') {
+        if ($throw && 'throwException' === $this->content) {
             throw new JsonException('test error');
         }
 

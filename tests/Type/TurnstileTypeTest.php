@@ -231,7 +231,7 @@ final class TestConstraintValidatorFactory implements ConstraintValidatorFactory
         $className = $constraint->validatedBy();
 
         if (!isset($this->validators[$className])) {
-            if ($className === CloudflareTurnstileValidator::class) {
+            if (CloudflareTurnstileValidator::class === $className) {
                 $this->validators[$className] = new CloudflareTurnstileValidator(
                     true,
                     $this->requestStack,
