@@ -1,5 +1,6 @@
 # Symfony Turnstile Bundle
 
+[![CI](https://github.com/vuillaume-agency/symfony-turnstile/actions/workflows/ci.yml/badge.svg)](https://github.com/vuillaume-agency/symfony-turnstile/actions/workflows/ci.yml)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%208.2-green)](https://php.net/)
 [![Minimum Symfony Version](https://img.shields.io/badge/symfony-%3E%3D%207.4-green)](https://symfony.com)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
