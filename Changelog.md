@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.5 (2026-01-08)
+
+### Added
+
+- Integration tests for TurnstileType form submission and validation
+
+### Fixed
+
+- Fix constraints option definition (use lazy default instead of normalizer)
+
 ## 1.0.4 (2026-01-08)
 
 ### Fixed

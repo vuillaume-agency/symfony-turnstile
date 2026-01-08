@@ -25,24 +25,24 @@ class TurnstileType extends AbstractType
             'mapped' => false,
             'missing_response_message' => null,
             'verification_failed_message' => null,
+            'constraints' => function (\Symfony\Component\OptionsResolver\Options $options) {
+                $constraintOptions = [];
+
+                if (null !== $options['missing_response_message']) {
+                    $constraintOptions['missingResponseMessage'] = $options['missing_response_message'];
+                }
+
+                if (null !== $options['verification_failed_message']) {
+                    $constraintOptions['verificationFailedMessage'] = $options['verification_failed_message'];
+                }
+
+                return [new CloudflareTurnstile(...$constraintOptions)];
+            },
         ]);
 
         $resolver->setAllowedTypes('missing_response_message', ['null', 'string']);
         $resolver->setAllowedTypes('verification_failed_message', ['null', 'string']);
-
-        $resolver->setNormalizer('constraints', function ($resolver, $value) {
-            $options = [];
-
-            if (null !== $resolver['missing_response_message']) {
-                $options['missingResponseMessage'] = $resolver['missing_response_message'];
-            }
-
-            if (null !== $resolver['verification_failed_message']) {
-                $options['verificationFailedMessage'] = $resolver['verification_failed_message'];
-            }
-
-            return [new CloudflareTurnstile(...$options)];
-        });
+        $resolver->setAllowedTypes('constraints', ['array', 'Closure']);
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options): void
