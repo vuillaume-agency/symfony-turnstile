@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.0/phpunit.xsd"
+         bootstrap="bootstrap.php"
          colors="true"
          failOnRisky="true"
          beStrictAboutChangesToGlobalState="true"
          beStrictAboutOutputDuringTests="true"
          failOnWarning="true"
+         failOnDeprecation="true"
          cacheDirectory=".phpunit.cache"
 >
+    <php>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=0"/>
+    </php>
     <testsuites>
         <testsuite name="unit">
             <directory>./</directory>

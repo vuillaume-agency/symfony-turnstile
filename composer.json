@@ -31,7 +31,7 @@
     "symfony/framework-bundle": "^7.4|^8.0",
     "symfony/http-client": "^7.4|^8.0",
     "symfony/yaml": "^7.4|^8.0",
-    "symfony/validator": "^7.4|^8.0",
+    "symfony/validator": "^7.4",
     "symfony/twig-bundle": "^7.4|^8.0"
   },
   "autoload": {
@@ -49,6 +49,7 @@
     "phpstan/phpstan": "^2.1",
     "phpstan/phpstan-symfony": "^2.0",
     "phpunit/phpunit": "^11.5",
-    "rector/rector": "^2.0"
+    "rector/rector": "^2.0",
+    "symfony/phpunit-bridge": "^8.0"
   }
 }
