@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.8 (2026-01-15)
+
+### Fixed
+
+- Fixed Symfony 7.4 deprecation in `CloudflareTurnstile` constraint (use named arguments in parent constructor)
+
+### Added
+
+- Added `symfony/phpunit-bridge` for deprecation detection
+- Extended CI matrix to test both Symfony 7.4 and 8.0 across all PHP versions
+- Configured PHPUnit to fail on direct deprecations (`max[direct]=0`)
+
 ## 1.0.7 (2026-01-08)
 
 ### Added
