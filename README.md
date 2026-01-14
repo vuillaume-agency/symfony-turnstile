@@ -231,7 +231,7 @@ composer remove pixelopen/cloudflare-turnstile-bundle
 composer require vuillaume-agency/symfony-turnstile
 ```
 
-### Step 2: Update bundles.php
+### Step 2: Update bundles.php (this is probably automatically done by the composer remove and require)
 
 ```php
 // config/bundles.php
@@ -242,25 +242,11 @@ composer require vuillaume-agency/symfony-turnstile
 VuillaumeAgency\TurnstileBundle\VuillaumeAgencyTurnstileBundle::class => ['all' => true],
 ```
 
-### Step 3: Update configuration
+### Step 3: Delete old config
 
 ```bash
 # Rename config file (if you have one)
-mv config/packages/pixel_open_cloudflare_turnstile.yaml config/packages/vuillaume_agency_turnstile.yaml
-```
-
-Update the config key in the file:
-
-```yaml
-# Before:
-# pixel_open_cloudflare_turnstile:
-#     key: '%env(TURNSTILE_KEY)%'
-#     secret: '%env(TURNSTILE_SECRET)%'
-
-# After (or just delete the file - env vars work by default now):
-vuillaume_agency_turnstile:
-    key: '%env(TURNSTILE_KEY)%'
-    secret: '%env(TURNSTILE_SECRET)%'
+rm config/packages/pixel_open_cloudflare_turnstile.yaml
 ```
 
 ### Step 4: Update imports in your code
