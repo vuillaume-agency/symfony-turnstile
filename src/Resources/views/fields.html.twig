@@ -1,9 +1,65 @@
 {% block turnstile_widget %}
     {% if enable %}
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
-    {% set attributes = attr | merge({class: (attr.class|default('cf-turnstile'))}) %}
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+        {% set widget_id = 'turnstile_' ~ id %}
+        {% set attributes = attr|merge({class: (attr.class|default('cf-turnstile'))}) %}
 
-    <div class="cf-turnstile"
-         data-sitekey="{{ key }}" {% for key, attribute in attributes %}{{ key|e }}="{{ attribute }}"{% endfor%} ></div>
+        <div id="{{ widget_id }}"
+             class="cf-turnstile"
+             data-sitekey="{{ key }}"
+             {% if disable_submit_until_verified %}
+             data-callback="{{ widget_id }}_onSuccess"
+             data-error-callback="{{ widget_id }}_onError"
+             data-expired-callback="{{ widget_id }}_onExpired"
+             {% endif %}
+             {% for attrKey, attribute in attributes %}{{ attrKey|e }}="{{ attribute }}" {% endfor %}>
+        </div>
+
+        {% if disable_submit_until_verified %}
+        <script>
+            (function() {
+                function initTurnstile() {
+                    const widget = document.getElementById('{{ widget_id }}');
+                    if (!widget) {
+                        return;
+                    }
+
+                    const form = widget.closest('form');
+                    if (!form) {
+                        return;
+                    }
+
+                    const submitButtons = form.querySelectorAll(
+                        'button[type="submit"], input[type="submit"], button:not([type])'
+                    );
+
+                    function setSubmitEnabled(enabled) {
+                        submitButtons.forEach(function(btn) {
+                            btn.disabled = !enabled;
+                        });
+                    }
+
+                    // Turnstile callbacks
+                    window['{{ widget_id }}_onSuccess'] = function(token) {
+                        setSubmitEnabled(true);
+                    };
+
+                    window['{{ widget_id }}_onError'] = function(errorCode) {
+                        setSubmitEnabled(false);
+                    };
+
+                    window['{{ widget_id }}_onExpired'] = function() {
+                        setSubmitEnabled(false);
+                    };
+                }
+
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', initTurnstile);
+                } else {
+                    initTurnstile();
+                }
+            })();
+        </script>
+        {% endif %}
     {% endif %}
 {% endblock %}

@@ -16,6 +16,7 @@ class TurnstileType extends AbstractType
     public function __construct(
         private readonly string $key,
         private readonly bool $enable,
+        private readonly bool $disableSubmitUntilVerified = false,
     ) {
     }
 
@@ -49,6 +50,7 @@ class TurnstileType extends AbstractType
     {
         $view->vars['key'] = $this->key;
         $view->vars['enable'] = $this->enable;
+        $view->vars['disable_submit_until_verified'] = $this->disableSubmitUntilVerified;
     }
 
     public function getBlockPrefix(): string

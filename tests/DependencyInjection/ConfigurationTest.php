@@ -26,6 +26,7 @@ final class ConfigurationTest extends TestCase
         self::assertTrue($config['enable']);
         self::assertSame('%env(TURNSTILE_KEY)%', $config['key']);
         self::assertSame('%env(TURNSTILE_SECRET)%', $config['secret']);
+        self::assertFalse($config['disable_submit_until_verified']);
     }
 
     public function testCustomValues(): void
@@ -35,12 +36,14 @@ final class ConfigurationTest extends TestCase
                 'enable' => false,
                 'key' => 'custom-key',
                 'secret' => 'custom-secret',
+                'disable_submit_until_verified' => true,
             ],
         ]);
 
         self::assertFalse($config['enable']);
         self::assertSame('custom-key', $config['key']);
         self::assertSame('custom-secret', $config['secret']);
+        self::assertTrue($config['disable_submit_until_verified']);
     }
 
     public function testPartialConfiguration(): void

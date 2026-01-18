@@ -30,6 +30,9 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('secret')
             ->defaultValue('%env(TURNSTILE_SECRET)%')
             ->end()
+            ->booleanNode('disable_submit_until_verified')
+            ->defaultFalse()
+            ->end()
             ->end();
 
         return $treeBuilder;

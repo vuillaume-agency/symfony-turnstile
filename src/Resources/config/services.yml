@@ -5,6 +5,7 @@ services:
     arguments:
       $key: '%vuillaume_agency_turnstile.key%'
       $enable: '%vuillaume_agency_turnstile.enable%'
+      $disableSubmitUntilVerified: '%vuillaume_agency_turnstile.disable_submit_until_verified%'
   turnstile.validator:
     class: VuillaumeAgency\TurnstileBundle\Validator\CloudflareTurnstileValidator
     tags: ['validator.constraint_validator']
@@ -20,3 +21,9 @@ services:
 
   VuillaumeAgency\TurnstileBundle\Http\TurnstileHttpClientInterface:
     alias: turnstile.http_client
+
+  turnstile.submit_extension:
+    class: VuillaumeAgency\TurnstileBundle\Form\Extension\TurnstileSubmitExtension
+    tags: ['form.type_extension']
+    arguments:
+      $enable: '%vuillaume_agency_turnstile.disable_submit_until_verified%'

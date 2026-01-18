@@ -137,6 +137,18 @@ final class TurnstileTypeTest extends TestCase
         self::assertTrue($view->vars['enable']);
     }
 
+    public function testFormViewHasDisableSubmitUntilVerifiedDefaultFalse(): void
+    {
+        $form = $this->factory->createBuilder(FormType::class)
+            ->add('captcha', TurnstileType::class)
+            ->getForm();
+
+        $view = $form->get('captcha')->createView();
+
+        self::assertArrayHasKey('disable_submit_until_verified', $view->vars);
+        self::assertFalse($view->vars['disable_submit_until_verified']);
+    }
+
     public function testFormIsNotMapped(): void
     {
         $form = $this->factory->createBuilder(FormType::class)

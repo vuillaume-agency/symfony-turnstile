@@ -48,6 +48,7 @@ final class VuillaumeAgencyTurnstileExtensionTest extends TestCase
         self::assertSame('%env(TURNSTILE_KEY)%', $this->container->getParameter('vuillaume_agency_turnstile.key'));
         self::assertSame('%env(TURNSTILE_SECRET)%', $this->container->getParameter('vuillaume_agency_turnstile.secret'));
         self::assertTrue($this->container->getParameter('vuillaume_agency_turnstile.enable'));
+        self::assertFalse($this->container->getParameter('vuillaume_agency_turnstile.disable_submit_until_verified'));
     }
 
     public function testLoadWithDisabledValidation(): void
@@ -57,6 +58,15 @@ final class VuillaumeAgencyTurnstileExtensionTest extends TestCase
         ], $this->container);
 
         self::assertFalse($this->container->getParameter('vuillaume_agency_turnstile.enable'));
+    }
+
+    public function testLoadWithDisableSubmitUntilVerified(): void
+    {
+        $this->extension->load([
+            ['disable_submit_until_verified' => true],
+        ], $this->container);
+
+        self::assertTrue($this->container->getParameter('vuillaume_agency_turnstile.disable_submit_until_verified'));
     }
 
     public function testServicesAreRegistered(): void
