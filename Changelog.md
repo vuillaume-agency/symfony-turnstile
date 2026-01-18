@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.1.0 (2026-01-18)
+
+### Added
+
+- New `disable_submit_until_verified` config option (default: `false`)
+- Automatically disables submit buttons when Turnstile field is present
+- JavaScript enables buttons after successful Turnstile verification
+- Buttons are re-disabled if verification expires or fails
+- Contributed by @nlemoine (#1)
+
 ## 1.0.8 (2026-01-15)
 
 ### Fixed

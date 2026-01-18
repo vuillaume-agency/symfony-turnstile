@@ -123,6 +123,7 @@ vuillaume_agency_turnstile:
     key: '%env(TURNSTILE_KEY)%'      # Default: reads from TURNSTILE_KEY env var
     secret: '%env(TURNSTILE_SECRET)%' # Default: reads from TURNSTILE_SECRET env var
     enable: true                      # Default: true
+    disable_submit_until_verified: false  # Default: false
 ```
 
 | Option   | Type    | Default                      | Description |
@@ -130,6 +131,7 @@ vuillaume_agency_turnstile:
 | `key`    | string  | `%env(TURNSTILE_KEY)%`       | Your Turnstile site key (public) |
 | `secret` | string  | `%env(TURNSTILE_SECRET)%`    | Your Turnstile secret key (private) |
 | `enable` | boolean | `true`                       | Enable/disable validation |
+| `disable_submit_until_verified` | boolean | `false` | Disable submit buttons until Turnstile verification completes |
 
 ## Usage
 
@@ -180,6 +182,23 @@ Customize the Turnstile widget appearance:
 ```
 
 See [Cloudflare Turnstile documentation](https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/) for all available options.
+
+### Disable submit until verified
+
+To prevent form submission before Turnstile completes, enable automatic submit button disabling:
+
+```yaml
+# config/packages/vuillaume_agency_turnstile.yaml
+vuillaume_agency_turnstile:
+    disable_submit_until_verified: true
+```
+
+When enabled:
+- Submit buttons are disabled on page load (server-side)
+- JavaScript enables them after Turnstile verification succeeds
+- Buttons are re-disabled if verification expires or fails
+
+This improves UX by preventing users from clicking submit before the challenge is ready.
 
 ### Custom error messages
 
