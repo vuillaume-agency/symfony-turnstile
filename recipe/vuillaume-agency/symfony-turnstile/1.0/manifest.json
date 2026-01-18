@@ -1,4 +1,7 @@
 {
+    "bundles": {
+        "VuillaumeAgency\\TurnstileBundle\\VuillaumeAgencyTurnstileBundle": ["all"]
+    },
     "env": {
         "TURNSTILE_KEY": "your-site-key",
         "TURNSTILE_SECRET": "your-secret-key"
