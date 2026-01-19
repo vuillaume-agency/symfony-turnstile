@@ -65,17 +65,15 @@ Turnstile is designed with privacy in mind:
 
 ## About this fork
 
-This bundle is a fork of [pixelopen/cloudflare-turnstile-bundle](https://github.com/Pixel-Open/cloudflare-turnstile-bundle), originally created by Pixel Développement.
+Originally a fork of [pixelopen/cloudflare-turnstile-bundle](https://github.com/Pixel-Open/cloudflare-turnstile-bundle) by Pixel Développement.
 
-**Why we forked:**
-- The original package was not maintained for Symfony 7.4+ and 8.0
-- We needed modern PHP 8.2+ features and up-to-date dependencies
-- We added improved error messages with multi-language support
-
-**Our commitment:**
-- Active maintenance for Symfony 7.4 LTS and 8.x
-- Regular updates and security patches
-- Community contributions welcome
+**What's new:**
+- Symfony 7.4 LTS and 8.x support
+- 22 languages for error messages
+- Customizable error messages via form options
+- `disable_submit_until_verified` option to prevent premature form submission
+- PHP 8.2+ with modern features (readonly, constructor promotion)
+- Active maintenance and community contributions welcome
 
 ## Requirements
 
