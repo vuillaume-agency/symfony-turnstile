@@ -200,6 +200,16 @@ When enabled:
 
 This improves UX by preventing users from clicking submit before the challenge is ready.
 
+> **Important:** This feature requires using `SubmitType` in your form builder. Raw HTML `<button>` elements in Twig templates will not be affected.
+
+```php
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
+$builder
+    ->add('captcha', TurnstileType::class)
+    ->add('submit', SubmitType::class, ['label' => 'Send']);
+```
+
 ### Custom error messages
 
 Pass custom messages directly as form options:
