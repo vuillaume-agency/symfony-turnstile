@@ -272,7 +272,6 @@ VuillaumeAgency\TurnstileBundle\VuillaumeAgencyTurnstileBundle::class => ['all' 
 ### Step 3: Delete old config
 
 ```bash
-# Rename config file (if you have one)
 rm config/packages/pixel_open_cloudflare_turnstile.yaml
 ```
 
