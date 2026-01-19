@@ -41,8 +41,13 @@ jobs:
 
     - name: Install dependencies with Symfony ${{ matrix.symfony-version }}
       run: |
-        composer require --no-update symfony/form:^${{ matrix.symfony-version }} symfony/framework-bundle:^${{ matrix.symfony-version }} symfony/http-client:^${{ matrix.symfony-version }} symfony/yaml:^${{ matrix.symfony-version }} symfony/validator:^${{ matrix.symfony-version }} symfony/twig-bundle:^${{ matrix.symfony-version }}
-        composer install --no-interaction --no-progress
+        composer update --prefer-stable --no-interaction --no-progress \
+          --with symfony/form:^${{ matrix.symfony-version }} \
+          --with symfony/framework-bundle:^${{ matrix.symfony-version }} \
+          --with symfony/http-client:^${{ matrix.symfony-version }} \
+          --with symfony/yaml:^${{ matrix.symfony-version }} \
+          --with symfony/validator:^${{ matrix.symfony-version }} \
+          --with symfony/twig-bundle:^${{ matrix.symfony-version }}
 
     - name: Check for vulnerabilities
       uses: symfonycorp/security-checker-action@v5
