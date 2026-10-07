@@ -26,9 +26,7 @@ final class CloudflareTurnstileValidatorTest extends TestCase
         $httpClient->expects(self::never())->method('verifyResponse');
 
         $validator = new CloudflareTurnstileValidator(false, $requestStack, $httpClient);
-        $validator->initialize($this->createContextExpectingNoViolation());
-
-        $validator->validate(null, new CloudflareTurnstile());
+        $validator->validateInContext(null, new CloudflareTurnstile(), $this->createContextExpectingNoViolation());
     }
 
     public function testValidationFailsWhenResponseEmpty(): void
@@ -40,9 +38,7 @@ final class CloudflareTurnstileValidatorTest extends TestCase
         $httpClient->expects(self::never())->method('verifyResponse');
 
         $validator = new CloudflareTurnstileValidator(true, $requestStack, $httpClient);
-        $validator->initialize($this->createContextExpectingViolation('turnstile.missing_response'));
-
-        $validator->validate(null, new CloudflareTurnstile());
+        $validator->validateInContext(null, new CloudflareTurnstile(), $this->createContextExpectingViolation('turnstile.missing_response'));
     }
 
     public function testValidationFailsWhenHttpClientReturnsFalse(): void
@@ -60,9 +56,7 @@ final class CloudflareTurnstileValidatorTest extends TestCase
             ->willReturn(false);
 
         $validator = new CloudflareTurnstileValidator(true, $requestStack, $httpClient);
-        $validator->initialize($this->createContextExpectingViolation('turnstile.verification_failed'));
-
-        $validator->validate(null, new CloudflareTurnstile());
+        $validator->validateInContext(null, new CloudflareTurnstile(), $this->createContextExpectingViolation('turnstile.verification_failed'));
     }
 
     public function testValidationPassesWhenHttpClientReturnsTrue(): void
@@ -80,9 +74,7 @@ final class CloudflareTurnstileValidatorTest extends TestCase
             ->willReturn(true);
 
         $validator = new CloudflareTurnstileValidator(true, $requestStack, $httpClient);
-        $validator->initialize($this->createContextExpectingNoViolation());
-
-        $validator->validate(null, new CloudflareTurnstile());
+        $validator->validateInContext(null, new CloudflareTurnstile(), $this->createContextExpectingNoViolation());
     }
 
     private function createRequestStack(Request $request): RequestStack
