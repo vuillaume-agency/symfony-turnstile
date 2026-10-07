@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- CI tests every Symfony minor the bundle declares (7.4, 8.0, 8.1), each pinned to its own minor,
+  instead of resolving `^8.0` to whatever the latest 8.x is
+
 ## 1.1.3 (2026-10-07)
 
 ### Fixed

@@ -14,13 +14,19 @@ jobs:
       fail-fast: false
       matrix:
         php-version: ['8.2', '8.3', '8.4', '8.5']
-        symfony-version: ['7.4', '8.0']
+        # Every Symfony minor the bundle declares (composer.json: ^7.4|^8.0), each pinned to its own
+        # minor with a tilde constraint below so a new minor cannot silently replace an older one.
+        symfony-version: ['7.4', '8.0', '8.1']
         exclude:
-          # Symfony 8.0 requires PHP >= 8.4
+          # Symfony 8.x requires PHP >= 8.4
           - php-version: '8.2'
             symfony-version: '8.0'
           - php-version: '8.3'
             symfony-version: '8.0'
+          - php-version: '8.2'
+            symfony-version: '8.1'
+          - php-version: '8.3'
+            symfony-version: '8.1'
 
     steps:
     - uses: actions/checkout@v4
@@ -42,12 +48,12 @@ jobs:
     - name: Install dependencies with Symfony ${{ matrix.symfony-version }}
       run: |
         composer update --prefer-stable --no-interaction --no-progress \
-          --with symfony/form:^${{ matrix.symfony-version }} \
-          --with symfony/framework-bundle:^${{ matrix.symfony-version }} \
-          --with symfony/http-client:^${{ matrix.symfony-version }} \
-          --with symfony/yaml:^${{ matrix.symfony-version }} \
-          --with symfony/validator:^${{ matrix.symfony-version }} \
-          --with symfony/twig-bundle:^${{ matrix.symfony-version }}
+          --with symfony/form:~${{ matrix.symfony-version }}.0 \
+          --with symfony/framework-bundle:~${{ matrix.symfony-version }}.0 \
+          --with symfony/http-client:~${{ matrix.symfony-version }}.0 \
+          --with symfony/yaml:~${{ matrix.symfony-version }}.0 \
+          --with symfony/validator:~${{ matrix.symfony-version }}.0 \
+          --with symfony/twig-bundle:~${{ matrix.symfony-version }}.0
 
     - name: Check for vulnerabilities
       uses: symfonycorp/security-checker-action@v5
