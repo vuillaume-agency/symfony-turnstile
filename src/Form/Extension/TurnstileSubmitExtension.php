@@ -13,11 +13,15 @@ use VuillaumeAgency\TurnstileBundle\Type\TurnstileType;
 /**
  * Automatically disables submit buttons when a Turnstile captcha field is present.
  * JavaScript will re-enable the button once the challenge is completed.
+ *
+ * Does nothing when the bundle is disabled: the widget and its script are not rendered then,
+ * so nothing would ever re-enable the button.
  */
 final class TurnstileSubmitExtension extends AbstractTypeExtension
 {
     public function __construct(
         private readonly bool $enable,
+        private readonly bool $disableSubmitUntilVerified,
     ) {
     }
 
@@ -28,7 +32,7 @@ final class TurnstileSubmitExtension extends AbstractTypeExtension
 
     public function finishView(FormView $view, FormInterface $form, array $options): void
     {
-        if (!$this->enable) {
+        if (!$this->enable || !$this->disableSubmitUntilVerified) {
             return;
         }
 

@@ -5,7 +5,6 @@
         {% set attributes = attr|merge({class: (attr.class|default('cf-turnstile'))}) %}
 
         <div id="{{ widget_id }}"
-             class="cf-turnstile"
              data-sitekey="{{ key }}"
              {% if disable_submit_until_verified %}
              data-callback="{{ widget_id }}_onSuccess"
@@ -17,47 +16,40 @@
 
         {% if disable_submit_until_verified %}
         <script>
-            (function() {
-                function initTurnstile() {
-                    const widget = document.getElementById('{{ widget_id }}');
-                    if (!widget) {
-                        return;
-                    }
+            (function () {
+                var widgetId = '{{ widget_id }}';
 
-                    const form = widget.closest('form');
-                    if (!form) {
-                        return;
-                    }
+                // Looked up at call time: the submit buttons are usually rendered after the widget.
+                function submitButtons() {
+                    var widget = document.getElementById(widgetId);
+                    var form = widget ? widget.closest('form') : null;
 
-                    const submitButtons = form.querySelectorAll(
-                        'button[type="submit"], input[type="submit"], button:not([type])'
-                    );
-
-                    function setSubmitEnabled(enabled) {
-                        submitButtons.forEach(function(btn) {
-                            btn.disabled = !enabled;
-                        });
-                    }
-
-                    // Turnstile callbacks
-                    window['{{ widget_id }}_onSuccess'] = function(token) {
-                        setSubmitEnabled(true);
-                    };
-
-                    window['{{ widget_id }}_onError'] = function(errorCode) {
-                        setSubmitEnabled(false);
-                    };
-
-                    window['{{ widget_id }}_onExpired'] = function() {
-                        setSubmitEnabled(false);
-                    };
+                    return form
+                        ? form.querySelectorAll('button[type="submit"], input[type="submit"], button:not([type])')
+                        : [];
                 }
 
-                if (document.readyState === 'loading') {
-                    document.addEventListener('DOMContentLoaded', initTurnstile);
-                } else {
-                    initTurnstile();
+                function setSubmitEnabled(enabled) {
+                    submitButtons().forEach(function (btn) {
+                        btn.disabled = !enabled;
+                    });
                 }
+
+                // Defined synchronously, never from a DOMContentLoaded listener: Turnstile resolves the
+                // data-*-callback names once, when it renders the widget. With api.js deferred, that render
+                // is scheduled with setTimeout(0) and runs before DOMContentLoaded handlers in Firefox, so a
+                // callback defined later would never be found and the buttons would stay disabled.
+                window[widgetId + '_onSuccess'] = function () {
+                    setSubmitEnabled(true);
+                };
+
+                window[widgetId + '_onError'] = function () {
+                    setSubmitEnabled(false);
+                };
+
+                window[widgetId + '_onExpired'] = function () {
+                    setSubmitEnabled(false);
+                };
             })();
         </script>
         {% endif %}
