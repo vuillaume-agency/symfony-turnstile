@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.3 (2026-10-07)
+
+### Fixed
+
+- Compatibility with symfony/validator 8.1: the validator implements `validateInContext()`, and
+  `initialize()` + `validate()` remain the Symfony 7.4 path. The deprecation of `initialize()` was
+  tripping the test suite's zero-deprecation policy, so the CI matrix was red on Symfony 8
+
 ## 1.1.2 (2026-10-07)
 
 ### Fixed
