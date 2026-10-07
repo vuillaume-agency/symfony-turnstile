@@ -195,6 +195,11 @@ When enabled:
 - Submit buttons are disabled on page load (server-side)
 - JavaScript enables them after Turnstile verification succeeds
 - Buttons are re-disabled if verification expires or fails
+- Nothing is disabled when the bundle itself is off (`enable: false`), since the widget is not rendered
+
+The widget declares its `data-callback` handlers as global functions named after the widget id. They are
+defined by the inline script rendered with the widget, before Turnstile renders it, so no code of yours is
+needed and no other script may redefine them.
 
 This improves UX by preventing users from clicking submit before the challenge is ready.
 

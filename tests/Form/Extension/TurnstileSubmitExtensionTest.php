@@ -17,7 +17,7 @@ final class TurnstileSubmitExtensionTest extends TestCase
 {
     public function testGetExtendedTypes(): void
     {
-        $extension = new TurnstileSubmitExtension(true);
+        $extension = new TurnstileSubmitExtension(true, true);
 
         self::assertSame([SubmitType::class], $extension::getExtendedTypes());
     }
@@ -41,6 +41,37 @@ final class TurnstileSubmitExtensionTest extends TestCase
     public function testSubmitButtonIsNotDisabledWhenTurnstileIsDisabled(): void
     {
         $factory = $this->createFormFactory(turnstileEnabled: false);
+
+        $form = $factory->createBuilder(FormType::class)
+            ->add('email', TextType::class)
+            ->add('captcha', TurnstileType::class)
+            ->add('submit', SubmitType::class)
+            ->getForm();
+
+        $view = $form->createView();
+
+        self::assertArrayNotHasKey('disabled', $view['submit']->vars['attr']);
+    }
+
+    public function testSubmitButtonIsNotDisabledWhenBundleIsDisabledEvenIfOptionIsOn(): void
+    {
+        // enable: false does not render the widget nor its script, so nothing could re-enable the button.
+        $factory = $this->createFormFactory(turnstileEnabled: false, disableSubmitUntilVerified: true);
+
+        $form = $factory->createBuilder(FormType::class)
+            ->add('email', TextType::class)
+            ->add('captcha', TurnstileType::class)
+            ->add('submit', SubmitType::class)
+            ->getForm();
+
+        $view = $form->createView();
+
+        self::assertArrayNotHasKey('disabled', $view['submit']->vars['attr']);
+    }
+
+    public function testSubmitButtonIsNotDisabledWhenOptionIsOff(): void
+    {
+        $factory = $this->createFormFactory(turnstileEnabled: true, disableSubmitUntilVerified: false);
 
         $form = $factory->createBuilder(FormType::class)
             ->add('email', TextType::class)
@@ -106,11 +137,11 @@ final class TurnstileSubmitExtensionTest extends TestCase
         self::assertSame('disabled', $view['submit']->vars['attr']['disabled']);
     }
 
-    private function createFormFactory(bool $turnstileEnabled): FormFactoryInterface
+    private function createFormFactory(bool $turnstileEnabled, bool $disableSubmitUntilVerified = true): FormFactoryInterface
     {
         return Forms::createFormFactoryBuilder()
-            ->addType(new TurnstileType('test-site-key', $turnstileEnabled))
-            ->addTypeExtension(new TurnstileSubmitExtension($turnstileEnabled))
+            ->addType(new TurnstileType('test-site-key', $turnstileEnabled, $disableSubmitUntilVerified))
+            ->addTypeExtension(new TurnstileSubmitExtension($turnstileEnabled, $disableSubmitUntilVerified))
             ->getFormFactory();
     }
 }

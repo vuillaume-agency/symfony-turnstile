@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.1.2 (2026-10-07)
+
+### Fixed
+
+- `disable_submit_until_verified`: the submit callbacks are defined as soon as the widget script runs,
+  no longer on `DOMContentLoaded`. Turnstile resolves the `data-callback` names once, when it renders
+  the widget, and with the deferred `api.js` that render precedes `DOMContentLoaded` handlers in Firefox:
+  the submit button stayed disabled after a successful challenge (#3)
+- `disable_submit_until_verified` no longer disables submit buttons when the bundle is disabled
+  (`enable: false`): the widget and its script are not rendered then, so nothing could re-enable them
+- The widget container no longer renders its `class` attribute twice
+
+## 1.1.1 (2026-01-19)
+
+### Changed
+
+- Allow `symfony/validator` 8.0
+
 ## 1.1.0 (2026-01-18)
 
 ### Added
