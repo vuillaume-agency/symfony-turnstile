@@ -1,0 +1,16 @@
+# Loaded only when protect_password_login is true (see VuillaumeAgencyTurnstileExtension).
+services:
+  turnstile.login_listener:
+    class: VuillaumeAgency\TurnstileBundle\Security\TurnstileLoginListener
+    arguments:
+      $turnstileHttpClient: '@VuillaumeAgency\TurnstileBundle\Http\TurnstileHttpClientInterface'
+      $requestStack: '@request_stack'
+      $enable: '%vuillaume_agency_turnstile.enable%'
+      $message: '%vuillaume_agency_turnstile.password_login_message%'
+    tags:
+      # Priority 300: after CsrfProtectionListener (512) and before UserCheckerListener::preCheckCredentials
+      # (256), which loads the account. Checked any later, an unknown email and a known one would
+      # answer differently without a token (the account lookup fails first for the unknown one):
+      # an enumeration oracle. The refusal is an AuthenticationException, so login_throttling
+      # counts it as a failed attempt.
+      - { name: kernel.event_listener, event: Symfony\Component\Security\Http\Event\CheckPassportEvent, priority: 300 }

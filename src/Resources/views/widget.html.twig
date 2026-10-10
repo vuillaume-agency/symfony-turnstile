@@ -1,0 +1,5 @@
+{# turnstile_widget(): the standalone widget, same markup as the turnstile_widget form block. #}
+{% if enable %}
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+<div data-sitekey="{{ key }}"{% for name, value in {class: 'cf-turnstile'}|merge(attributes) %} {{ name|e('html_attr') }}="{{ value }}"{% endfor %}></div>
+{% endif %}

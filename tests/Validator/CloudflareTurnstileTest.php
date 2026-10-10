@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace VuillaumeAgency\TurnstileBundle\Tests\Validator;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 use VuillaumeAgency\TurnstileBundle\Validator\CloudflareTurnstile;
 use VuillaumeAgency\TurnstileBundle\Validator\CloudflareTurnstileValidator;
 
@@ -68,5 +69,20 @@ final class CloudflareTurnstileTest extends TestCase
 
         // Default target is PROPERTY
         self::assertSame(CloudflareTurnstile::PROPERTY_CONSTRAINT, $constraint->getTargets());
+    }
+
+    public function testUsableAsAPhpAttributeOnAProperty(): void
+    {
+        $dto = new class {
+            #[CloudflareTurnstile(missingResponseMessage: 'Please solve the challenge.')]
+            public string $captcha = '';
+        };
+
+        $attributes = (new ReflectionProperty($dto, 'captcha'))->getAttributes(CloudflareTurnstile::class);
+
+        self::assertCount(1, $attributes);
+        $constraint = $attributes[0]->newInstance();
+        self::assertInstanceOf(CloudflareTurnstile::class, $constraint);
+        self::assertSame('Please solve the challenge.', $constraint->missingResponseMessage);
     }
 }

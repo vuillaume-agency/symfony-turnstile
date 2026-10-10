@@ -46,15 +46,21 @@ src/
 ├── Http/
 │   ├── TurnstileHttpClientInterface.php   # Interface for HTTP client
 │   └── CloudflareTurnstileHttpClient.php  # Calls Cloudflare siteverify API
+├── Security/
+│   └── TurnstileLoginListener.php # protect_password_login: CheckPassportEvent listener (priority 300)
+├── Twig/
+│   └── TurnstileExtension.php     # turnstile_widget() for plain HTML templates (login page)
 ├── Type/
 │   └── TurnstileType.php          # Symfony form type
 ├── Validator/
-│   ├── CloudflareTurnstile.php    # Constraint with message keys
+│   ├── CloudflareTurnstile.php    # Constraint with message keys, usable as a PHP attribute
 │   └── CloudflareTurnstileValidator.php   # Server-side validation
 ├── Resources/
 │   ├── config/services.yml        # Service definitions
-│   ├── translations/              # Error messages (en, fr, es, de, it, pt)
-│   └── views/fields.html.twig     # Widget template
+│   ├── config/security.yml        # The login listener, loaded only when protect_password_login is true
+│   ├── translations/              # validators.* (form messages, 25 locales), security.{en,fr} (login message)
+│   ├── views/fields.html.twig     # Form widget template
+│   └── views/widget.html.twig     # Standalone widget template (turnstile_widget)
 ├── VuillaumeAgencyTurnstileBundle.php
 └── VuillaumeAgencyTurnstileCompilerPass.php  # Registers Twig form theme
 ```
@@ -73,7 +79,13 @@ vuillaume_agency_turnstile:
     key: '%env(TURNSTILE_KEY)%'
     secret: '%env(TURNSTILE_SECRET)%'
     enable: true  # Set false to bypass validation
+    protect_password_login: false   # true: verify the token on form_login / login-form authenticators (needs symfony/security-http)
+    password_login_message: 'The security check failed. Please try again.'   # translated in the "security" domain
 ```
+
+The functional tests (`tests/Functional/`) boot a minimal kernel with a `form_login` firewall, a
+custom login-form authenticator and an `http_basic` firewall; the CI runs them on every declared
+Symfony minor (7.4, 8.0, 8.1).
 
 ## Error Messages
 

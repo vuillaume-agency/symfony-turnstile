@@ -27,6 +27,19 @@ final class ConfigurationTest extends TestCase
         self::assertSame('%env(TURNSTILE_KEY)%', $config['key']);
         self::assertSame('%env(TURNSTILE_SECRET)%', $config['secret']);
         self::assertFalse($config['disable_submit_until_verified']);
+        // Off in 1.x: an existing installation keeps its login untouched on upgrade.
+        self::assertFalse($config['protect_password_login']);
+        self::assertSame('The security check failed. Please try again.', $config['password_login_message']);
+    }
+
+    public function testPasswordLoginOptions(): void
+    {
+        $config = $this->processor->processConfiguration($this->configuration, [
+            ['protect_password_login' => true, 'password_login_message' => 'Nope.'],
+        ]);
+
+        self::assertTrue($config['protect_password_login']);
+        self::assertSame('Nope.', $config['password_login_message']);
     }
 
     public function testCustomValues(): void

@@ -53,7 +53,10 @@ jobs:
           --with symfony/http-client:~${{ matrix.symfony-version }}.0 \
           --with symfony/yaml:~${{ matrix.symfony-version }}.0 \
           --with symfony/validator:~${{ matrix.symfony-version }}.0 \
-          --with symfony/twig-bundle:~${{ matrix.symfony-version }}.0
+          --with symfony/twig-bundle:~${{ matrix.symfony-version }}.0 \
+          --with symfony/security-bundle:~${{ matrix.symfony-version }}.0 \
+          --with symfony/security-http:~${{ matrix.symfony-version }}.0 \
+          --with symfony/browser-kit:~${{ matrix.symfony-version }}.0
 
     - name: Check for vulnerabilities
       uses: symfonycorp/security-checker-action@v5

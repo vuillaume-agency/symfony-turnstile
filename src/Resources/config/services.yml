@@ -28,3 +28,12 @@ services:
     arguments:
       $enable: '%vuillaume_agency_turnstile.enable%'
       $disableSubmitUntilVerified: '%vuillaume_agency_turnstile.disable_submit_until_verified%'
+
+  # turnstile_widget(): the widget in a plain HTML template (a login page, for instance), with
+  # the same markup as the form field.
+  turnstile.twig_extension:
+    class: VuillaumeAgency\TurnstileBundle\Twig\TurnstileExtension
+    tags: ['twig.extension']
+    arguments:
+      $key: '%vuillaume_agency_turnstile.key%'
+      $enable: '%vuillaume_agency_turnstile.enable%'

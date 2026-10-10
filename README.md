@@ -10,6 +10,7 @@ A Symfony bundle to integrate [Cloudflare Turnstile](https://www.cloudflare.com/
 ## Features
 
 - **Zero user friction** — No puzzles, no clicking on traffic lights
+- **Login page covered** — One option protects `form_login` and custom login-form authenticators, something a form field cannot do (see [Protecting the login form](#protecting-the-login-form)). As of October 2026 we found no other Symfony Turnstile bundle doing it
 - **GDPR-friendly** — No cookie consent required, privacy-first design
 - **22 languages included** — All major European languages supported
 - **Symfony 8 ready** — Full support for Symfony 7.4 LTS and 8.x
@@ -68,7 +69,8 @@ Turnstile is designed with privacy in mind:
 Originally a fork of [pixelopen/cloudflare-turnstile-bundle](https://github.com/Pixel-Open/cloudflare-turnstile-bundle) by Pixel Développement.
 
 **What's new:**
-- Symfony 7.4 LTS and 8.x support
+- Password login protection (`protect_password_login`): the upstream bundle, like every Symfony Turnstile bundle we know of, stops at the form field; the login page needs a hook in the security system, which 1.2 provides
+- Symfony 7.4 LTS and 8.x (both bundles support Symfony 8 now; this one targets 7.4 LTS and up)
 - 22 languages for error messages
 - Customizable error messages via form options
 - `disable_submit_until_verified` option to prevent premature form submission
@@ -232,6 +234,47 @@ turnstile.missing_response: Please verify you are human.
 turnstile.verification_failed: Verification failed. Please try again.
 ```
 
+## Protecting the login form
+
+Symfony's `form_login` reads the login POST itself, outside any form type, so a Turnstile field
+in a form class does not apply to the login page. Since 1.2 one option covers it:
+
+```yaml
+# config/packages/vuillaume_agency_turnstile.yaml
+vuillaume_agency_turnstile:
+    protect_password_login: true
+```
+
+Then render the widget in your login template, above the submit button:
+
+```twig
+{{ turnstile_widget({'data-action': 'login'}) }}
+```
+
+The token is verified while the passport is checked, after the CSRF token and before the account
+is looked up, so a refused challenge reveals nothing about the account. A refusal counts as a
+failed attempt for `login_throttling`. The check is skipped when `enable` is `false`, as for
+form fields.
+
+What it covers: `form_login` and every authenticator extending `AbstractLoginFormAuthenticator`
+(the one `make:security:form-login` and the documentation use). What it leaves alone:
+`http_basic`, `json_login`, `login_link`, `remember_me`, OAuth and `Security::login()`, so API
+clients keep working. A login written outside the Security component (a controller checking the
+password itself) does not go through the passport: use the `TurnstileType` field on that form
+instead.
+
+One token, one verification. If your project already verifies `cf-turnstile-response` in a
+listener or an authenticator, remove it when you turn the option on: a Turnstile token is
+accepted once.
+
+The message shown on refusal is `password_login_message` (default: "The security check failed.
+Please try again."), translated through the `security` domain
+(`error.messageKey|trans(error.messageData, 'security')` in the template that
+`make:security:form-login` generates).
+
+The option needs `symfony/security-http`, which `symfony/security-bundle` installs. It is off by
+default in 1.x and will be on by default in 2.0.
+
 ## Translations
 
 The bundle provides error messages in **22 European languages**:
@@ -255,6 +298,11 @@ The bundle provides error messages in **22 European languages**:
 ## Migrating from pixelopen/cloudflare-turnstile-bundle
 
 This bundle is a modernized fork. Here's how to migrate:
+
+Why migrate: Symfony 7.4/8 support, 22 languages, customizable messages, and since 1.2 the login
+page, which no `TurnstileType` field can cover because `form_login` handles the POST itself. If
+you hit [pixelopen/cloudflare-turnstile-bundle#2](https://github.com/Pixel-Open/cloudflare-turnstile-bundle/issues/2)
+on your login form, `protect_password_login` is the fix.
 
 ### Step 1: Replace the package
 

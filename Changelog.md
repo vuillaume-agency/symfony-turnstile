@@ -1,11 +1,32 @@
 # Changelog
 
-## Unreleased
+## 1.2.0 (unreleased)
+
+### Added
+
+- Password login protection in one line of configuration. Symfony's `form_login` handles the
+  login POST itself, outside any form type, so a `TurnstileType` field cannot cover the login
+  page. Set `protect_password_login: true` and the bundle verifies the Turnstile token during
+  authentication, for `form_login` and for any authenticator extending
+  `AbstractLoginFormAuthenticator`. The check runs after the CSRF check and before the account
+  is loaded, counts as a failed attempt for `login_throttling`, and is skipped when `enable` is
+  false (tests, local development).
+- `turnstile_widget()` Twig function: renders the widget in a plain HTML form, the login
+  template included, with the same markup as the form field.
+- `password_login_message` option, translated out of the box in the `security` domain.
+- `#[CloudflareTurnstile]` usable as a PHP attribute on a DTO property.
+- Flex recipe 1.2 turns `protect_password_login` on for new installations.
+
+Existing installations are not affected: the option defaults to `false` in 1.x and will default
+to `true` in 2.0. Projects that already verify the token in their own listener or authenticator
+can remove that code once the option is on: a Turnstile token is accepted once, so a second
+verification would refuse the login.
 
 ### Changed
 
 - CI tests every Symfony minor the bundle declares (7.4, 8.0, 8.1), each pinned to its own minor,
-  instead of resolving `^8.0` to whatever the latest 8.x is
+  instead of resolving `^8.0` to whatever the latest 8.x is, and pins `symfony/security-bundle`,
+  `symfony/security-http` and `symfony/browser-kit` the same way for the login integration tests
 
 ## 1.1.3 (2026-10-07)
 

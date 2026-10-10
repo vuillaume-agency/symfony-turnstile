@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+{% if error %}<p class="error">{{ error.messageKey }}</p>{% endif %}
+<form method="post" action="/login">
+    <input type="text" name="_username">
+    <input type="password" name="_password">
+    {{ turnstile_widget({'data-action': 'login'}) }}
+    <button type="submit">Sign in</button>
+</form>
+</body>
+</html>

@@ -6,8 +6,11 @@ namespace VuillaumeAgency\TurnstileBundle\Tests\DependencyInjection;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Security\Http\Event\CheckPassportEvent;
 use VuillaumeAgency\TurnstileBundle\DependencyInjection\VuillaumeAgencyTurnstileExtension;
 use VuillaumeAgency\TurnstileBundle\Http\TurnstileHttpClientInterface;
+use VuillaumeAgency\TurnstileBundle\Security\TurnstileLoginListener;
+use VuillaumeAgency\TurnstileBundle\Twig\TurnstileExtension;
 use VuillaumeAgency\TurnstileBundle\Type\TurnstileType;
 use VuillaumeAgency\TurnstileBundle\Validator\CloudflareTurnstileValidator;
 
@@ -102,5 +105,38 @@ final class VuillaumeAgencyTurnstileExtensionTest extends TestCase
     public function testExtensionAlias(): void
     {
         self::assertSame('vuillaume_agency_turnstile', $this->extension->getAlias());
+    }
+
+    public function testTheTwigExtensionIsRegistered(): void
+    {
+        $this->extension->load([], $this->container);
+
+        $definition = $this->container->getDefinition('turnstile.twig_extension');
+
+        self::assertSame(TurnstileExtension::class, $definition->getClass());
+        self::assertTrue($definition->hasTag('twig.extension'));
+    }
+
+    public function testTheLoginListenerIsAbsentByDefault(): void
+    {
+        $this->extension->load([], $this->container);
+
+        self::assertFalse($this->container->hasDefinition('turnstile.login_listener'));
+        self::assertFalse($this->container->getParameter('vuillaume_agency_turnstile.protect_password_login'));
+    }
+
+    public function testTheLoginListenerIsRegisteredAtPriority300WhenAskedFor(): void
+    {
+        $this->extension->load([['protect_password_login' => true]], $this->container);
+
+        $definition = $this->container->getDefinition('turnstile.login_listener');
+
+        self::assertSame(TurnstileLoginListener::class, $definition->getClass());
+        $tags = $definition->getTag('kernel.event_listener');
+        self::assertCount(1, $tags);
+        self::assertSame(CheckPassportEvent::class, $tags[0]['event']);
+        // After CsrfProtectionListener (512), before UserCheckerListener loads the account (256).
+        self::assertSame(300, $tags[0]['priority']);
+        self::assertSame('The security check failed. Please try again.', $this->container->getParameter('vuillaume_agency_turnstile.password_login_message'));
     }
 }
