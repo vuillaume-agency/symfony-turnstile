@@ -272,8 +272,9 @@ Please try again."), translated through the `security` domain
 (`error.messageKey|trans(error.messageData, 'security')` in the template that
 `make:security:form-login` generates).
 
-The option needs `symfony/security-http`, which `symfony/security-bundle` installs. It is off by
-default in 1.x and will be on by default in 2.0.
+The option acts through `symfony/security-http`, which `symfony/security-bundle` installs. In a
+project without it there is no password login to protect, and the option has no effect. It is off
+by default in 1.x and will be on by default in 2.0.
 
 ## Translations
 

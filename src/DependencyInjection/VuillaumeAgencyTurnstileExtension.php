@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace VuillaumeAgency\TurnstileBundle\DependencyInjection;
 
-use LogicException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -26,13 +25,11 @@ class VuillaumeAgencyTurnstileExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
-        // The login listener exists in the container only when asked for: a project without a
-        // password login, or one that verifies the token in its own code, carries nothing extra.
-        if ($config['protect_password_login']) {
-            if (!class_exists(CheckPassportEvent::class)) {
-                throw new LogicException('The "vuillaume_agency_turnstile.protect_password_login" option needs the Symfony security component: run "composer require symfony/security-http" (symfony/security-bundle installs it).');
-            }
-
+        // The login listener exists in the container only when asked for, and only when the
+        // Symfony security component is installed. Without it there is no password login to
+        // protect, so the option has nothing to do: the 1.2 recipe turns it on for every new
+        // installation, and a project without security-bundle must still install cleanly.
+        if ($config['protect_password_login'] && class_exists(CheckPassportEvent::class)) {
             $loader->load('security.yml');
         }
 

@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.1 (unreleased)
+
+### Fixed
+
+- A project without the Symfony security component installs cleanly with
+  `protect_password_login: true` (the setting the 1.2 recipe writes): the option now has no
+  effect there, since there is no password login to protect, instead of stopping
+  `cache:clear` with an exception asking for `symfony/security-http`.
+
 ## 1.2.0 (2026-10-10)
 
 ### Added

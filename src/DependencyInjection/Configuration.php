@@ -37,7 +37,8 @@ class Configuration implements ConfigurationInterface
             // TurnstileType field cannot cover the login page. This option verifies the token
             // during authentication instead (form_login and custom login-form authenticators).
             // Off by default in 1.x so that an existing installation keeps its behaviour on
-            // upgrade; new installations get it from the recipe. Requires symfony/security-http.
+            // upgrade; new installations get it from the recipe. Without symfony/security-http
+            // there is no password login, and the option has no effect.
             ->booleanNode('protect_password_login')
             ->defaultFalse()
             ->end()
