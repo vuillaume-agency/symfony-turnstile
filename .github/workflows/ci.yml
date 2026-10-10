@@ -46,17 +46,22 @@ jobs:
           ${{ runner.os }}-php-${{ matrix.php-version }}-sf${{ matrix.symfony-version }}-
 
     - name: Install dependencies with Symfony ${{ matrix.symfony-version }}
+      # Every Symfony component the test kernel loads is pinned to the matrix minor, not only the
+      # ones composer.json requires: left free, http-kernel resolved to 8.1 next to framework-bundle
+      # 7.4 and the "7.4" job was a mixed install whose 8.1 deprecations failed the zero-deprecation
+      # policy without testing 7.4 at all.
       run: |
-        composer update --prefer-stable --no-interaction --no-progress \
-          --with symfony/form:~${{ matrix.symfony-version }}.0 \
-          --with symfony/framework-bundle:~${{ matrix.symfony-version }}.0 \
-          --with symfony/http-client:~${{ matrix.symfony-version }}.0 \
-          --with symfony/yaml:~${{ matrix.symfony-version }}.0 \
-          --with symfony/validator:~${{ matrix.symfony-version }}.0 \
-          --with symfony/twig-bundle:~${{ matrix.symfony-version }}.0 \
-          --with symfony/security-bundle:~${{ matrix.symfony-version }}.0 \
-          --with symfony/security-http:~${{ matrix.symfony-version }}.0 \
-          --with symfony/browser-kit:~${{ matrix.symfony-version }}.0
+        WITH=()
+        for pkg in form framework-bundle http-client yaml validator twig-bundle \
+                   security-bundle security-http browser-kit \
+                   http-kernel dependency-injection config http-foundation routing event-dispatcher \
+                   security-core security-csrf password-hasher twig-bridge cache var-exporter \
+                   filesystem finder error-handler options-resolver property-access property-info \
+                   string mime var-dumper console; do
+          WITH+=(--with "symfony/${pkg}:~${{ matrix.symfony-version }}.0")
+        done
+        composer update --prefer-stable --no-interaction --no-progress "${WITH[@]}"
+        composer show 'symfony/*' | grep -vE 'contracts|polyfill|phpunit-bridge' | awk '{print $1, $2}'
 
     - name: Check for vulnerabilities
       uses: symfonycorp/security-checker-action@v5

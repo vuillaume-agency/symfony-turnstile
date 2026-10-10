@@ -24,6 +24,15 @@ final class PasswordLoginTest extends WebTestCase
         return Kernel::class;
     }
 
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        // Symfony 8.0's DebugHandlersListener installs the ErrorHandler as the exception handler on
+        // the first request and nothing removes it; PHPUnit 11 then flags the test as risky
+        // ("did not remove its own exception handlers"). 7.4 and 8.1 leave no handler behind.
+        restore_exception_handler();
+    }
+
     public function testAMissingTokenIsRefusedAndNoPasswordIsChecked(): void
     {
         $client = static::createClient();

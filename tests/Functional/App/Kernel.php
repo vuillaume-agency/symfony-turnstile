@@ -52,6 +52,9 @@ final class Kernel extends BaseKernel
             'http_method_override' => false,
             'handle_all_throwables' => true,
             'php_errors' => ['log' => true],
+            // Explicit: framework-bundle 7.3+ deprecates relying on the default, and the suite
+            // fails on any deprecation.
+            'property_info' => ['with_constructor_extractor' => true],
             'session' => [
                 'storage_factory_id' => 'session.storage.factory.mock_file',
                 'handler_id' => null,
