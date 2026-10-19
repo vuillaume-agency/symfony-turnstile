@@ -14,17 +14,26 @@ jobs:
       fail-fast: false
       matrix:
         php-version: ['8.2', '8.3', '8.4', '8.5']
-        # Every maintained Symfony minor the bundle declares (composer.json: ^7.4|^8.0), each pinned to
-        # its own minor with a tilde constraint below so a new minor cannot silently replace an older one.
-        # 8.0 is end of life (07/2026): every 8.0 release carries an advisory fixed only in 8.1, so
-        # Composer refuses to install it and the job could never run.
-        symfony-version: ['7.4', '8.1']
+        # Every Symfony minor the bundle declares (composer.json: ^7.4|^8.0), each pinned to its own
+        # minor with a tilde constraint below so a new minor cannot silently replace an older one.
+        # End-of-life minors stay: projects still on them install every new release of the bundle.
+        symfony-version: ['7.4', '8.0', '8.1']
         exclude:
           # Symfony 8.x requires PHP >= 8.4
+          - php-version: '8.2'
+            symfony-version: '8.0'
+          - php-version: '8.3'
+            symfony-version: '8.0'
           - php-version: '8.2'
             symfony-version: '8.1'
           - php-version: '8.3'
             symfony-version: '8.1'
+
+    env:
+      # An end-of-life minor gets no security release: once an advisory covers all of it, Composer
+      # refuses to install it. Those jobs install it anyway and skip the vulnerability check, which
+      # can only report Symfony's own unpatched releases; the maintained minors keep both gates.
+      SYMFONY_EOL: ${{ contains(fromJSON('["8.0"]'), matrix.symfony-version) }}
 
     steps:
     - uses: actions/checkout@v4
@@ -58,10 +67,12 @@ jobs:
                    string mime var-dumper console; do
           WITH+=(--with "symfony/${pkg}:~${{ matrix.symfony-version }}.0")
         done
+        if [ "$SYMFONY_EOL" = true ]; then WITH+=(--no-blocking); fi
         composer update --prefer-stable --no-interaction --no-progress "${WITH[@]}"
         composer show 'symfony/*' | grep -vE 'contracts|polyfill|phpunit-bridge' | awk '{print $1, $2}'
 
     - name: Check for vulnerabilities
+      if: env.SYMFONY_EOL != 'true'
       uses: symfonycorp/security-checker-action@v5
 
     - name: Run PHP-CS-Fixer
