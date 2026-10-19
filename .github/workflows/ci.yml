@@ -14,15 +14,13 @@ jobs:
       fail-fast: false
       matrix:
         php-version: ['8.2', '8.3', '8.4', '8.5']
-        # Every Symfony minor the bundle declares (composer.json: ^7.4|^8.0), each pinned to its own
-        # minor with a tilde constraint below so a new minor cannot silently replace an older one.
-        symfony-version: ['7.4', '8.0', '8.1']
+        # Every maintained Symfony minor the bundle declares (composer.json: ^7.4|^8.0), each pinned to
+        # its own minor with a tilde constraint below so a new minor cannot silently replace an older one.
+        # 8.0 is end of life (07/2026): every 8.0 release carries an advisory fixed only in 8.1, so
+        # Composer refuses to install it and the job could never run.
+        symfony-version: ['7.4', '8.1']
         exclude:
           # Symfony 8.x requires PHP >= 8.4
-          - php-version: '8.2'
-            symfony-version: '8.0'
-          - php-version: '8.3'
-            symfony-version: '8.0'
           - php-version: '8.2'
             symfony-version: '8.1'
           - php-version: '8.3'
