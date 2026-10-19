@@ -1,5 +1,7 @@
 {# turnstile_widget(): the standalone widget, same markup as the turnstile_widget form block. #}
 {% if enable %}
+{# api.js only renders .cf-turnstile: a class passed in the attributes is added to it, never substituted. #}
+{% set extra_classes = (attributes.class|default(''))|split(' ')|filter(c => c is not empty and c != 'cf-turnstile') %}
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
-<div data-sitekey="{{ key }}"{% for name, value in {class: 'cf-turnstile'}|merge(attributes) %} {{ name|e('html_attr') }}="{{ value }}"{% endfor %}></div>
+<div data-sitekey="{{ key }}"{% for name, value in {class: (['cf-turnstile']|merge(extra_classes))|join(' ')}|merge(attributes|filter((v, k) => k != 'class')) %} {{ name|e('html_attr') }}="{{ value }}"{% endfor %}></div>
 {% endif %}

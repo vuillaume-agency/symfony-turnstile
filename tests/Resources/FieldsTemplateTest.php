@@ -53,6 +53,22 @@ final class FieldsTemplateTest extends TestCase
         self::assertStringContainsString('data-theme="light"', $html);
     }
 
+    public function testCustomClassIsAddedToCfTurnstile(): void
+    {
+        // api.js only renders .cf-turnstile: substituting the class would leave an empty container.
+        $html = $this->render(['attr' => ['class' => 'my-widget']]);
+
+        self::assertSame(1, substr_count($html, ' class='));
+        self::assertStringContainsString('class="cf-turnstile my-widget"', $html);
+    }
+
+    public function testCfTurnstileIsNotRepeated(): void
+    {
+        $html = $this->render(['attr' => ['class' => ' my-widget  cf-turnstile ']]);
+
+        self::assertStringContainsString('class="cf-turnstile my-widget"', $html);
+    }
+
     public function testDefaultClassIsCfTurnstile(): void
     {
         $html = $this->render([]);

@@ -33,6 +33,23 @@ final class TurnstileExtensionTest extends TestCase
         self::assertStringContainsString('class="cf-turnstile my-widget"', $html);
     }
 
+    public function testACustomClassIsAddedToCfTurnstile(): void
+    {
+        // api.js only renders .cf-turnstile: substituting the class would leave an empty container.
+        $html = $this->render("{{ turnstile_widget({'class': 'my-widget', 'data-action': 'login'}) }}", enable: true);
+
+        self::assertSame(1, substr_count($html, 'class="'));
+        self::assertStringContainsString('class="cf-turnstile my-widget"', $html);
+        self::assertStringContainsString('data-action="login"', $html);
+    }
+
+    public function testCfTurnstileIsNotRepeated(): void
+    {
+        $html = $this->render("{{ turnstile_widget({'class': ' my-widget  cf-turnstile '}) }}", enable: true);
+
+        self::assertStringContainsString('class="cf-turnstile my-widget"', $html);
+    }
+
     public function testAttributeValuesAreEscaped(): void
     {
         $html = $this->render("{{ turnstile_widget({'data-action': '\"><script>'}) }}", enable: true);

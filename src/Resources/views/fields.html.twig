@@ -2,7 +2,9 @@
     {% if enable %}
         <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
         {% set widget_id = 'turnstile_' ~ id %}
-        {% set attributes = attr|merge({class: (attr.class|default('cf-turnstile'))}) %}
+        {# api.js only renders .cf-turnstile: a class passed in attr is added to it, never substituted. #}
+        {% set extra_classes = (attr.class|default(''))|split(' ')|filter(c => c is not empty and c != 'cf-turnstile') %}
+        {% set attributes = attr|merge({class: (['cf-turnstile']|merge(extra_classes))|join(' ')}) %}
 
         <div id="{{ widget_id }}"
              data-sitekey="{{ key }}"

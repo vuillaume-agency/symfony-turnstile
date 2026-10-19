@@ -177,6 +177,7 @@ Customize the Turnstile widget appearance:
         'data-theme' => 'dark',      // 'light', 'dark', or 'auto'
         'data-size' => 'compact',    // 'normal' or 'compact'
         'data-action' => 'contact',  // Custom action name for analytics
+        'class' => 'my-widget',      // Added to cf-turnstile, which api.js needs to render the widget
     ],
 ])
 ```

@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.2.2 (unreleased)
+
+### Fixed
+
+- A `class` passed to the widget (`attr` of the form field, or the `turnstile_widget()` attributes)
+  is added to `cf-turnstile` instead of replacing it. `api.js` only renders `.cf-turnstile`, so a
+  custom class left an empty container and no form could be submitted. Affected 1.1.2 to 1.2.1:
+  before 1.1.2 the class attribute was rendered twice and browsers kept `cf-turnstile`, the first
+  one, which hid the bug (#7)
+
 ## 1.2.1 (2026-10-10)
 
 ### Fixed
